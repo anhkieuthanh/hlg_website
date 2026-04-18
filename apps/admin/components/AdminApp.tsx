@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { apiGet, apiPatch, downloadLeadsCsv, Session } from "../lib/api";
+import { ApiError, apiGet, apiPatch, downloadLeadsCsv, Session } from "../lib/api";
 import { LoginForm } from "./LoginForm";
 
 type View = "dashboard" | "leads" | "projects" | "catalogue-products" | "news" | "capabilities";
@@ -33,7 +33,15 @@ export function AdminApp() {
     const path = view === "dashboard" ? "/dashboard" : `/${view}`;
     apiGet(path, session.accessToken)
       .then(setData)
-      .catch(() => setError("Không tải được dữ liệu."));
+      .catch((error) => {
+        if (error instanceof ApiError && error.status === 401) {
+          localStorage.removeItem("hlg_admin_session");
+          setSession(null);
+          setError("");
+          return;
+        }
+        setError("Không tải được dữ liệu.");
+      });
   }, [session, view]);
 
   const nav = useMemo(() => Object.keys(labels) as View[], []);
@@ -43,7 +51,10 @@ export function AdminApp() {
   return (
     <main className="admin-shell">
       <aside className="sidebar">
-        <h1>Hoàng Long Group CMS</h1>
+        <div className="sidebar-brand">
+          <img src="/assets/hoang-long-logo.svg" alt="Hoàng Long JSC" />
+          <h1>Hoàng Long Group CMS</h1>
+        </div>
         {nav.map((item) => (
           <button className={view === item ? "active" : ""} key={item} onClick={() => setView(item)}>
             {labels[item]}

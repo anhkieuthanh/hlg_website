@@ -1,4 +1,6 @@
 import { ProjectCard } from "../../../components/Cards";
+import { PartnerCta } from "../../../components/ExperienceSections";
+import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { contentFor, getLocale } from "../../../lib/content";
 
 export default function ConstructionPage({ params }: { params: { locale: string } }) {
@@ -7,18 +9,24 @@ export default function ConstructionPage({ params }: { params: { locale: string 
   return (
     <main>
       <section className="detail-hero">
-        <div className="container">
+        <Reveal className="container">
           <p className="eyebrow">{locale === "vi" ? "Xây dựng" : "Construction"}</p>
           <h1>{locale === "vi" ? "Thi công công nghiệp có kiểm soát tiến độ và chất lượng" : "Industrial construction with schedule and quality control"}</h1>
-        </div>
+          <p>
+            {locale === "vi"
+              ? "Mảng xây dựng được đặt trong luồng phối hợp tổng thể: sản xuất, bàn giao cấu kiện, công trường và hồ sơ nghiệm thu."
+              : "Construction is framed as part of the overall coordination flow: fabrication, component handover, site execution, and acceptance records."}
+          </p>
+        </Reveal>
       </section>
       <section className="section">
-        <div className="container grid two">
+        <Stagger className="container grid two">
           {projects.map((project) => (
             <ProjectCard key={project.id} locale={locale} project={project} />
           ))}
-        </div>
+        </Stagger>
       </section>
+      <PartnerCta locale={locale} />
     </main>
   );
 }

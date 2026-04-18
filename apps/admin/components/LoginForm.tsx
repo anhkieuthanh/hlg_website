@@ -25,8 +25,14 @@ export function LoginForm({ onLogin }: { onLogin: (session: Session) => void }) 
 
   return (
     <main className="login">
-      <form onSubmit={submit}>
-        <h1>Hoàng Long Group Admin</h1>
+      <form method="post" onSubmit={submit}>
+        <div className="login-brand">
+          <img src="/assets/hoang-long-logo.svg" alt="Hoàng Long JSC" />
+          <span>
+            <small>CMS</small>
+            <h1>Hoàng Long Group Admin</h1>
+          </span>
+        </div>
         <label className="field">
           Email
           <input name="email" type="email" required defaultValue="admin@hoanglong.local" />

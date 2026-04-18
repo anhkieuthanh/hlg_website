@@ -1,4 +1,6 @@
 import { ProductCard } from "../../../components/Cards";
+import { PartnerCta } from "../../../components/ExperienceSections";
+import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { contentFor, getLocale, localized, t } from "../../../lib/content";
 
 export default function CataloguePage({ params }: { params: { locale: string } }) {
@@ -7,13 +9,18 @@ export default function CataloguePage({ params }: { params: { locale: string } }
   return (
     <main>
       <section className="detail-hero">
-        <div className="container">
+        <Reveal className="container">
           <p className="eyebrow">{t(locale, "catalogueTitle")}</p>
           <h1>{t(locale, "catalogueCopy")}</h1>
-        </div>
+          <p>
+            {locale === "vi"
+              ? "Catalogue được tổ chức như danh sách hạng mục có thể phối hợp sản xuất/thi công, kèm hồ sơ và yêu cầu đầu vào cần làm rõ."
+              : "The catalogue is organized as cooperation-ready fabrication or construction scopes, with records and input requirements to clarify."}
+          </p>
+        </Reveal>
       </section>
       <section className="section alt">
-        <div className="container grid two">
+        <Stagger className="container grid two">
           {content.catalogueCategories.map((category) => (
             <article className="card" key={category.id}>
               <div className="card-body">
@@ -22,15 +29,16 @@ export default function CataloguePage({ params }: { params: { locale: string } }
               </div>
             </article>
           ))}
-        </div>
+        </Stagger>
       </section>
       <section className="section">
-        <div className="container grid">
+        <Stagger className="container grid">
           {content.catalogueProducts.map((product) => (
             <ProductCard key={product.id} locale={locale} product={product} />
           ))}
-        </div>
+        </Stagger>
       </section>
+      <PartnerCta locale={locale} />
     </main>
   );
 }

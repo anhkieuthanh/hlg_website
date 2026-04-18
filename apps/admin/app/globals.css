@@ -1,12 +1,14 @@
 :root {
-  --ink: #111512;
+  --ink: #08233f;
   --panel: #ffffff;
-  --paper: #f3f4ef;
-  --line: #d8ddd8;
-  --muted: #68716c;
-  --signal: #d6a522;
-  --oxide: #a74935;
-  --teal: #1f7567;
+  --paper: #f4f8fc;
+  --line: #c8d7e6;
+  --muted: #536a7f;
+  --brand-blue: #11539a;
+  --deep-blue: #083b73;
+  --signal: #fff200;
+  --oxide: #ed1b24;
+  --teal: #1d7e9b;
 }
 
 * {
@@ -35,15 +37,32 @@ textarea {
 }
 
 .sidebar {
-  background: var(--ink);
+  background: linear-gradient(180deg, var(--brand-blue), var(--deep-blue));
   color: white;
   padding: 28px 22px;
+}
+
+.sidebar-brand {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.sidebar-brand img {
+  width: 82px;
+  height: 82px;
+  border: 2px solid rgba(255, 255, 255, 0.82);
+  border-radius: 12px;
 }
 
 .sidebar h1 {
   margin: 0 0 28px;
   font-size: 24px;
   line-height: 1.1;
+}
+
+.sidebar-brand h1 {
+  margin-bottom: 0;
 }
 
 .sidebar button {
@@ -93,6 +112,7 @@ textarea {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
+  box-shadow: 0 12px 30px rgba(8, 59, 115, 0.08);
 }
 
 .card {
@@ -109,6 +129,7 @@ textarea {
 .card strong {
   display: block;
   margin-top: 10px;
+  color: var(--brand-blue);
   font-size: 34px;
 }
 
@@ -137,11 +158,11 @@ th {
 }
 
 .button {
-  border: 1px solid var(--ink);
+  border: 1px solid var(--brand-blue);
   border-radius: 6px;
   min-height: 42px;
   padding: 0 14px;
-  background: var(--ink);
+  background: var(--brand-blue);
   color: white;
   font-weight: 800;
   cursor: pointer;
@@ -149,7 +170,7 @@ th {
 
 .button.light {
   background: white;
-  color: var(--ink);
+  color: var(--brand-blue);
 }
 
 .login {
@@ -157,14 +178,51 @@ th {
   display: grid;
   place-items: center;
   padding: 24px;
+  background:
+    linear-gradient(135deg, rgba(8, 59, 115, 0.9), rgba(17, 83, 154, 0.78)),
+    radial-gradient(circle at 68% 18%, rgba(255, 242, 0, 0.32), transparent 28%),
+    var(--deep-blue);
 }
 
 .login form {
   width: min(440px, 100%);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.52);
   border-radius: 8px;
   background: white;
   padding: 28px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.login-brand img {
+  width: 76px;
+  height: 76px;
+  border-radius: 12px;
+}
+
+.login-brand span {
+  display: grid;
+  gap: 4px;
+}
+
+.login-brand small {
+  color: var(--oxide);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.login-brand h1 {
+  margin: 0;
+  color: var(--deep-blue);
+  font-size: 26px;
+  line-height: 1.12;
 }
 
 .field {
@@ -181,6 +239,13 @@ th {
   border: 1px solid var(--line);
   border-radius: 6px;
   padding: 12px 13px;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--brand-blue);
+  outline: 3px solid rgba(17, 83, 154, 0.16);
 }
 
 .notice {

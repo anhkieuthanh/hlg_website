@@ -13,6 +13,8 @@ const prisma = new PrismaClient();
 async function main() {
   const email = process.env.ADMIN_EMAIL || "admin@hoanglong.local";
   const password = process.env.ADMIN_PASSWORD || "ChangeMe123!";
+  const totpSecret =
+    process.env.ADMIN_TOTP_SECRET === undefined ? "JBSWY3DPEHPK3PXP" : process.env.ADMIN_TOTP_SECRET || null;
   const passwordHash = await bcrypt.hash(password, 12);
 
   await prisma.user.upsert({
@@ -20,7 +22,7 @@ async function main() {
     update: {
       passwordHash,
       role: Role.SUPER_ADMIN,
-      totpSecret: process.env.ADMIN_TOTP_SECRET || "JBSWY3DPEHPK3PXP",
+      totpSecret,
       isActive: true
     },
     create: {
@@ -28,7 +30,7 @@ async function main() {
       name: "Hoang Long Admin",
       passwordHash,
       role: Role.SUPER_ADMIN,
-      totpSecret: process.env.ADMIN_TOTP_SECRET || "JBSWY3DPEHPK3PXP"
+      totpSecret
     }
   });
 

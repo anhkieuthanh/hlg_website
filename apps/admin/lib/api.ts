@@ -1,4 +1,13 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number
+  ) {
+    super(message);
+  }
+}
 
 export type Session = {
   accessToken: string;
@@ -16,7 +25,7 @@ export async function login(input: { email: string; password: string; totpCode?:
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input)
   });
-  if (!response.ok) throw new Error("Login failed");
+  if (!response.ok) throw new ApiError("Login failed", response.status);
   return response.json();
 }
 
@@ -25,7 +34,7 @@ export async function apiGet<T>(path: string, token: string): Promise<T> {
     headers: { Authorization: `Bearer ${token}` },
     cache: "no-store"
   });
-  if (!response.ok) throw new Error(`GET ${path} failed`);
+  if (!response.ok) throw new ApiError(`GET ${path} failed`, response.status);
   return response.json();
 }
 
@@ -35,7 +44,7 @@ export async function apiPatch<T>(path: string, token: string, body: unknown): P
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify(body)
   });
-  if (!response.ok) throw new Error(`PATCH ${path} failed`);
+  if (!response.ok) throw new ApiError(`PATCH ${path} failed`, response.status);
   return response.json();
 }
 
@@ -43,7 +52,7 @@ export async function downloadLeadsCsv(token: string) {
   const response = await fetch(`${API_URL}/api/admin/leads/export.csv`, {
     headers: { Authorization: `Bearer ${token}` }
   });
-  if (!response.ok) throw new Error("Export failed");
+  if (!response.ok) throw new ApiError("Export failed", response.status);
   const blob = await response.blob();
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");

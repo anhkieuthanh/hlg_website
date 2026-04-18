@@ -1,4 +1,6 @@
 import { NewsCard } from "../../../components/Cards";
+import { PartnerCta } from "../../../components/ExperienceSections";
+import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { contentFor, getLocale, t } from "../../../lib/content";
 
 export default function NewsPage({ params }: { params: { locale: string } }) {
@@ -7,18 +9,19 @@ export default function NewsPage({ params }: { params: { locale: string } }) {
   return (
     <main>
       <section className="detail-hero">
-        <div className="container">
+        <Reveal className="container">
           <p className="eyebrow">{t(locale, "newsTitle")}</p>
           <h1>{t(locale, "newsCopy")}</h1>
-        </div>
+        </Reveal>
       </section>
       <section className="section">
-        <div className="container grid">
+        <Stagger className="container grid">
           {content.news.map((article) => (
             <NewsCard key={article.id} locale={locale} article={article} />
           ))}
-        </div>
+        </Stagger>
       </section>
+      <PartnerCta locale={locale} />
     </main>
   );
 }

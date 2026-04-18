@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import { contentFor, getLocale, localized, t } from "../../../../lib/content";
+import { PartnerCta } from "../../../../components/ExperienceSections";
+import { Reveal, Stagger } from "../../../../components/MotionPrimitives";
 
 export function generateStaticParams() {
   return contentFor("vi").projects.flatMap((project) => [
@@ -15,17 +17,25 @@ export default function ProjectDetailPage({ params }: { params: { locale: string
   return (
     <main>
       <section className="detail-hero">
-        <div className="container">
+        <Reveal className="container">
           <p className="eyebrow">{localized(locale, project.sector)}</p>
           <h1>{localized(locale, project.title)}</h1>
           <p>{localized(locale, project.excerpt)}</p>
-        </div>
+        </Reveal>
       </section>
-      <section className="container detail-body">
+      <Stagger className="container detail-body">
         <article>
           <img className="card-media" src={project.heroImage} alt={localized(locale, project.title)} />
           <p>{localized(locale, project.body)}</p>
           <p>{localized(locale, project.result)}</p>
+          <div className="insight-panel">
+            <h2>{locale === "vi" ? "Điểm đáng chú ý cho đối tác" : "Partner review notes"}</h2>
+            <p>
+              {locale === "vi"
+                ? "Case study này nên được dùng để đánh giá cách Hoàng Long nhận vai trò, phối hợp tiến độ và kiểm soát chất lượng trong phạm vi được giao."
+                : "Use this case study to evaluate how Hoang Long takes scope ownership, coordinates schedule, and controls quality within assigned work."}
+            </p>
+          </div>
         </article>
         <aside className="facts">
           <div className="fact">
@@ -49,7 +59,8 @@ export default function ProjectDetailPage({ params }: { params: { locale: string
             <strong>{localized(locale, project.result)}</strong>
           </div>
         </aside>
-      </section>
+      </Stagger>
+      <PartnerCta locale={locale} />
     </main>
   );
 }

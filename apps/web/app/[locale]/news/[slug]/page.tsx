@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import { contentFor, getLocale, localized } from "../../../../lib/content";
+import { PartnerCta } from "../../../../components/ExperienceSections";
+import { Reveal } from "../../../../components/MotionPrimitives";
 
 export function generateStaticParams() {
   return contentFor("vi").news.flatMap((article) => [
@@ -15,18 +17,19 @@ export default function NewsDetailPage({ params }: { params: { locale: string; s
   return (
     <main>
       <section className="detail-hero">
-        <div className="container">
+        <Reveal className="container">
           <p className="eyebrow">{localized(locale, article.category)}</p>
           <h1>{localized(locale, article.title)}</h1>
           <p>{localized(locale, article.excerpt)}</p>
-        </div>
+        </Reveal>
       </section>
-      <section className="container detail-body">
+      <Reveal className="container detail-body">
         <article>
           <img className="card-media" src={article.image} alt={localized(locale, article.title)} />
           <p>{localized(locale, article.body)}</p>
         </article>
-      </section>
+      </Reveal>
+      <PartnerCta locale={locale} />
     </main>
   );
 }

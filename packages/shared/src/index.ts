@@ -109,12 +109,11 @@ export type ContactLead = {
 export const fallbackImage = "/assets/industrial-hero.png";
 
 export const navigation = [
-  { href: "/about", label: { vi: "Giới thiệu", en: "About" } },
   { href: "/manufacturing", label: { vi: "Sản xuất", en: "Manufacturing" } },
-  { href: "/construction", label: { vi: "Xây dựng", en: "Construction" } },
   { href: "/capabilities", label: { vi: "Năng lực", en: "Capabilities" } },
   { href: "/projects", label: { vi: "Dự án", en: "Projects" } },
   { href: "/catalogue", label: { vi: "Catalogue", en: "Catalogue" } },
+  { href: "/construction", label: { vi: "Xây dựng", en: "Construction" } },
   { href: "/news", label: { vi: "Tin tức", en: "News" } },
   { href: "/contact", label: { vi: "Liên hệ", en: "Contact" } }
 ];

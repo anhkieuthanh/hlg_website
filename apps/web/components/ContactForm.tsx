@@ -14,7 +14,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"}/api/public/leads`, {
+      const response = await fetch("/api/public/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -28,7 +28,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
   }
 
   return (
-    <form className="form" onSubmit={onSubmit}>
+    <form className="form" method="post" onSubmit={onSubmit}>
       <div className="form-row">
         <label className="field">
           {t(locale, "name")}
