@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  CONTENT_EDITOR
+  LEAD_MANAGER
+  VIEWER
+}
+
+enum PublishStatus {
+  draft
+  published
+  archived
+}
+
+enum LeadStatus {
+  new
+  in_progress
+  resolved
+  archived
+}
+
+enum MediaType {
+  image
+  pdf
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         Role      @default(VIEWER)
+  totpSecret   String?
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  auditLogs    AuditLog[]
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actor      User?    @relation(fields: [actorId], references: [id])
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+}
+
+model ContactLead {
+  id        String     @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  company   String?
+  message   String
+  status    LeadStatus @default(new)
+  source    String     @default("website")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?
+}
+
+model MediaAsset {
+  id        String    @id @default(cuid())
+  url       String
+  type      MediaType @default(image)
+  alt       Json
+  tags      String[]  @default([])
+  folder    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       Json
+  excerpt     Json
+  body        Json
+  sector      Json
+  location    Json
+  year        Int
+  scale       Json
+  role        Json
+  result      Json
+  featured    Boolean       @default(false)
+  status      PublishStatus @default(draft)
+  enPublished Boolean       @default(false)
+  heroImage   String?
+  gallery     Json?
+  seo         Json
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+}
+
+model CapabilityItem {
+  id          String        @id @default(cuid())
+  type        String
+  title       Json
+  description Json
+  metric      Json?
+  image       String?
+  status      PublishStatus @default(draft)
+  enPublished Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+}
+
+model CatalogueCategory {
+  id          String             @id @default(cuid())
+  slug        String             @unique
+  name        Json
+  description Json
+  status      PublishStatus      @default(draft)
+  enPublished Boolean            @default(false)
+  products    CatalogueProduct[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  deletedAt   DateTime?
+}
+
+model CatalogueProduct {
+  id          String            @id @default(cuid())
+  slug        String            @unique
+  categoryId  String
+  category    CatalogueCategory @relation(fields: [categoryId], references: [id])
+  name        Json
+  summary     Json
+  specs       Json
+  status      PublishStatus     @default(draft)
+  enPublished Boolean           @default(false)
+  image       String?
+  seo         Json
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  deletedAt   DateTime?
+}
+
+model NewsArticle {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       Json
+  excerpt     Json
+  body        Json
+  category    Json
+  tags        String[]      @default([])
+  publishedAt DateTime?
+  status      PublishStatus @default(draft)
+  enPublished Boolean       @default(false)
+  image       String?
+  seo         Json
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

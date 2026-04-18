@@ -1,0 +1,26 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1000" fill="#1d231f"/>
+  <rect y="710" width="1600" height="290" fill="#2c322e"/>
+  <path d="M0 760L1600 520V1000H0V760Z" fill="#111512" opacity="0.82"/>
+  <path d="M130 660H430V420L540 520V660H670V360L820 505V660H1120V300L1330 500V660H1470V780H130V660Z" fill="#4f5a54"/>
+  <path d="M210 500H355V660H210V500Z" fill="#889188" opacity="0.55"/>
+  <path d="M730 450H1030V660H730V450Z" fill="#737c75" opacity="0.58"/>
+  <path d="M1170 420H1365V660H1170V420Z" fill="#879189" opacity="0.5"/>
+  <path d="M95 782H1510" stroke="#d6a522" stroke-width="12"/>
+  <path d="M120 820H1480" stroke="#a74935" stroke-width="4" opacity="0.75"/>
+  <g opacity="0.42">
+    <path d="M0 224H1600" stroke="#e8ece6"/>
+    <path d="M0 324H1600" stroke="#e8ece6"/>
+    <path d="M0 424H1600" stroke="#e8ece6"/>
+    <path d="M0 524H1600" stroke="#e8ece6"/>
+    <path d="M188 0V1000" stroke="#e8ece6"/>
+    <path d="M388 0V1000" stroke="#e8ece6"/>
+    <path d="M588 0V1000" stroke="#e8ece6"/>
+    <path d="M788 0V1000" stroke="#e8ece6"/>
+    <path d="M988 0V1000" stroke="#e8ece6"/>
+    <path d="M1188 0V1000" stroke="#e8ece6"/>
+    <path d="M1388 0V1000" stroke="#e8ece6"/>
+  </g>
+  <circle cx="1285" cy="230" r="84" fill="#d6a522" opacity="0.9"/>
+  <path d="M90 245C236 161 355 128 506 160C665 194 738 292 910 274C1078 257 1150 135 1340 122C1440 115 1518 139 1600 177" stroke="#d8ddd8" stroke-width="6" opacity="0.35"/>
+</svg>

@@ -1,0 +1,88 @@
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { LeadStatus, Prisma } from "@prisma/client";
+import { PrismaService } from "../prisma.service";
+
+type CollectionName = "projects" | "catalogue-categories" | "catalogue-products" | "news" | "capabilities" | "media";
+
+@Injectable()
+export class AdminService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async dashboard() {
+    const [newLeads, draftProjects, publishedProjects, products, articles] = await Promise.all([
+      this.prisma.contactLead.count({ where: { status: "new", deletedAt: null } }),
+      this.prisma.project.count({ where: { status: "draft", deletedAt: null } }),
+      this.prisma.project.count({ where: { status: "published", deletedAt: null } }),
+      this.prisma.catalogueProduct.count({ where: { deletedAt: null } }),
+      this.prisma.newsArticle.count({ where: { deletedAt: null } })
+    ]);
+    return { newLeads, draftProjects, publishedProjects, products, articles };
+  }
+
+  listLeads(status?: LeadStatus) {
+    return this.prisma.contactLead.findMany({
+      where: { deletedAt: null, ...(status ? { status } : {}) },
+      orderBy: { createdAt: "desc" }
+    });
+  }
+
+  updateLeadStatus(id: string, status: LeadStatus) {
+    return this.prisma.contactLead.update({ where: { id }, data: { status } });
+  }
+
+  async exportLeadsCsv() {
+    const leads = await this.listLeads();
+    const header = ["id", "createdAt", "status", "name", "email", "phone", "company", "message"];
+    const rows = leads.map((lead) =>
+      header.map((field) => this.csvCell(String((lead as unknown as Record<string, unknown>)[field] ?? ""))).join(",")
+    );
+    return [header.join(","), ...rows].join("\n");
+  }
+
+  list(collection: CollectionName) {
+    const model = this.model(collection);
+    return model.findMany({ where: { deletedAt: null }, orderBy: { createdAt: "desc" } });
+  }
+
+  get(collection: CollectionName, id: string) {
+    const model = this.model(collection);
+    return model.findFirst({ where: { id, deletedAt: null } });
+  }
+
+  async create(collection: CollectionName, data: Record<string, unknown>) {
+    const model = this.model(collection);
+    return model.create({ data });
+  }
+
+  async update(collection: CollectionName, id: string, data: Record<string, unknown>) {
+    const model = this.model(collection);
+    const existing = await this.get(collection, id);
+    if (!existing) throw new NotFoundException("Record not found");
+    return model.update({ where: { id }, data });
+  }
+
+  async softDelete(collection: CollectionName, id: string) {
+    const model = this.model(collection);
+    const existing = await this.get(collection, id);
+    if (!existing) throw new NotFoundException("Record not found");
+    return model.update({ where: { id }, data: { deletedAt: new Date() } });
+  }
+
+  private model(collection: CollectionName) {
+    const models: Record<CollectionName, any> = {
+      projects: this.prisma.project,
+      "catalogue-categories": this.prisma.catalogueCategory,
+      "catalogue-products": this.prisma.catalogueProduct,
+      news: this.prisma.newsArticle,
+      capabilities: this.prisma.capabilityItem,
+      media: this.prisma.mediaAsset
+    };
+    const model = models[collection];
+    if (!model) throw new BadRequestException("Unknown collection");
+    return model;
+  }
+
+  private csvCell(value: string) {
+    return `"${value.replace(/"/g, '""')}"`;
+  }
+}
