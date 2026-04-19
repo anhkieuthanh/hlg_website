@@ -7,6 +7,7 @@ import {
   newsSeed,
   projectSeed
 } from "@hlg/shared";
+import { defaultFooterSettings, defaultHeaderSettings, defaultNavigationSettings } from "../src/site-settings";
 
 const prisma = new PrismaClient();
 
@@ -91,6 +92,24 @@ async function main() {
         primaryCta: { vi: "Xem dự án tiêu biểu", en: "View signature projects" }
       }
     }
+  });
+
+  await prisma.siteSetting.upsert({
+    where: { key: "site.header" },
+    update: { value: defaultHeaderSettings },
+    create: { key: "site.header", value: defaultHeaderSettings }
+  });
+
+  await prisma.siteSetting.upsert({
+    where: { key: "site.footer" },
+    update: { value: defaultFooterSettings },
+    create: { key: "site.footer", value: defaultFooterSettings }
+  });
+
+  await prisma.siteSetting.upsert({
+    where: { key: "site.navigation" },
+    update: { value: defaultNavigationSettings },
+    create: { key: "site.navigation", value: defaultNavigationSettings }
   });
 }
 

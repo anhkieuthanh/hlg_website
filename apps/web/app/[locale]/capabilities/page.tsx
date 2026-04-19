@@ -1,10 +1,11 @@
-import { contentFor, getLocale, localized, t } from "../../../lib/content";
+import { getLocale, localized, t } from "../../../lib/content";
 import { ControlFlow, PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
+import { getCapabilities } from "../../../lib/public-api";
 
-export default function CapabilitiesPage({ params }: { params: { locale: string } }) {
+export default async function CapabilitiesPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
-  const content = contentFor(locale);
+  const capabilities = await getCapabilities(locale);
   return (
     <main>
       <section className="detail-hero">
@@ -25,7 +26,7 @@ export default function CapabilitiesPage({ params }: { params: { locale: string 
             </p>
           </Reveal>
           <Stagger className="grid">
-            {content.capabilities.map((item) => (
+            {capabilities.map((item) => (
               <article className="card" key={item.id}>
                 <img className="card-media" src={item.image} alt={localized(locale, item.title)} />
                 <div className="card-body">

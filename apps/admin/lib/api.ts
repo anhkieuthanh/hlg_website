@@ -48,6 +48,35 @@ export async function apiPatch<T>(path: string, token: string, body: unknown): P
   return response.json();
 }
 
+export async function apiPost<T>(path: string, token: string, body: unknown): Promise<T> {
+  const response = await fetch(`${API_URL}/api/admin${path}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!response.ok) throw new ApiError(`POST ${path} failed`, response.status);
+  return response.json();
+}
+
+export async function apiDelete<T>(path: string, token: string): Promise<T> {
+  const response = await fetch(`${API_URL}/api/admin${path}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!response.ok) throw new ApiError(`DELETE ${path} failed`, response.status);
+  return response.json();
+}
+
+export async function getSetting<T>(key: string, token: string): Promise<T> {
+  const setting = await apiGet<{ value: T }>(`/settings/${key}`, token);
+  return setting.value;
+}
+
+export async function saveSetting<T>(key: string, token: string, value: T): Promise<T> {
+  const setting = await apiPatch<{ value: T }>(`/settings/${key}`, token, { value });
+  return setting.value;
+}
+
 export async function downloadLeadsCsv(token: string) {
   const response = await fetch(`${API_URL}/api/admin/leads/export.csv`, {
     headers: { Authorization: `Bearer ${token}` }

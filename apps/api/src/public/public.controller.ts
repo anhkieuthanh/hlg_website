@@ -12,6 +12,11 @@ export class PublicController {
     return this.service.home(locale);
   }
 
+  @Get("site")
+  site(@Query("locale") locale?: string) {
+    return this.service.site(locale);
+  }
+
   @Get("projects")
   projects(@Query("locale") locale?: string) {
     return this.service.listProjects(locale);
@@ -30,6 +35,11 @@ export class PublicController {
   @Get("news")
   news(@Query("locale") locale?: string) {
     return this.service.news(locale);
+  }
+
+  @Get("news/:slug")
+  newsArticle(@Param("slug") slug: string, @Query("locale") locale?: string) {
+    return this.service.newsArticle(locale, slug);
   }
 
   @Get("capabilities")

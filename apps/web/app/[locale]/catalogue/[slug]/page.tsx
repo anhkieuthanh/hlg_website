@@ -1,18 +1,12 @@
 import { notFound } from "next/navigation";
-import { contentFor, getLocale, localized } from "../../../../lib/content";
+import { getLocale, localized } from "../../../../lib/content";
 import { PartnerCta } from "../../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../../components/MotionPrimitives";
+import { getCatalogueProduct } from "../../../../lib/public-api";
 
-export function generateStaticParams() {
-  return contentFor("vi").catalogueProducts.flatMap((product) => [
-    { locale: "vi", slug: product.slug },
-    ...(product.enPublished ? [{ locale: "en", slug: product.slug }] : [])
-  ]);
-}
-
-export default function ProductDetailPage({ params }: { params: { locale: string; slug: string } }) {
+export default async function ProductDetailPage({ params }: { params: { locale: string; slug: string } }) {
   const locale = getLocale(params.locale);
-  const product = contentFor(locale).catalogueProducts.find((item) => item.slug === params.slug);
+  const product = await getCatalogueProduct(locale, params.slug);
   if (!product) notFound();
   return (
     <main>
@@ -37,7 +31,7 @@ export default function ProductDetailPage({ params }: { params: { locale: string
           </div>
         </article>
         <aside className="facts">
-          {product.specs.map((spec, index) => (
+          {(product.specs || []).map((spec: any, index: number) => (
             <div className="fact" key={index}>
               <span>{localized(locale, spec.label)}</span>
               <strong>{localized(locale, spec.value)}</strong>

@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { LeadStatus, Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma.service";
+import { defaultSettingValue, isSiteSettingKey, type SiteSettingKey } from "../site-settings";
 
 type CollectionName = "projects" | "catalogue-categories" | "catalogue-products" | "news" | "capabilities" | "media";
 
@@ -9,14 +10,39 @@ export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
 
   async dashboard() {
-    const [newLeads, draftProjects, publishedProjects, products, articles] = await Promise.all([
+    const [
+      newLeads,
+      draftProjects,
+      publishedProjects,
+      draftArticles,
+      publishedArticles,
+      products,
+      capabilities,
+      projectsMissingEn,
+      articlesMissingEn,
+      capabilitiesMissingEn
+    ] = await Promise.all([
       this.prisma.contactLead.count({ where: { status: "new", deletedAt: null } }),
       this.prisma.project.count({ where: { status: "draft", deletedAt: null } }),
       this.prisma.project.count({ where: { status: "published", deletedAt: null } }),
+      this.prisma.newsArticle.count({ where: { status: "draft", deletedAt: null } }),
+      this.prisma.newsArticle.count({ where: { status: "published", deletedAt: null } }),
       this.prisma.catalogueProduct.count({ where: { deletedAt: null } }),
-      this.prisma.newsArticle.count({ where: { deletedAt: null } })
+      this.prisma.capabilityItem.count({ where: { deletedAt: null } }),
+      this.prisma.project.count({ where: { status: "published", enPublished: false, deletedAt: null } }),
+      this.prisma.newsArticle.count({ where: { status: "published", enPublished: false, deletedAt: null } }),
+      this.prisma.capabilityItem.count({ where: { status: "published", enPublished: false, deletedAt: null } })
     ]);
-    return { newLeads, draftProjects, publishedProjects, products, articles };
+    return {
+      newLeads,
+      draftProjects,
+      publishedProjects,
+      draftArticles,
+      publishedArticles,
+      products,
+      capabilities,
+      missingEn: projectsMissingEn + articlesMissingEn + capabilitiesMissingEn
+    };
   }
 
   listLeads(status?: LeadStatus) {
@@ -68,6 +94,27 @@ export class AdminService {
     return model.update({ where: { id }, data: { deletedAt: new Date() } });
   }
 
+  async getSetting(key: string) {
+    const settingKey = this.settingKey(key);
+    const setting = await this.prisma.siteSetting.findUnique({ where: { key: settingKey } });
+    if (setting) return setting;
+    return this.prisma.siteSetting.create({
+      data: {
+        key: settingKey,
+        value: defaultSettingValue(settingKey) as Prisma.InputJsonValue
+      }
+    });
+  }
+
+  async updateSetting(key: string, value: unknown) {
+    const settingKey = this.settingKey(key);
+    return this.prisma.siteSetting.upsert({
+      where: { key: settingKey },
+      update: { value: value as Prisma.InputJsonValue },
+      create: { key: settingKey, value: value as Prisma.InputJsonValue }
+    });
+  }
+
   private model(collection: CollectionName) {
     const models: Record<CollectionName, any> = {
       projects: this.prisma.project,
@@ -80,6 +127,11 @@ export class AdminService {
     const model = models[collection];
     if (!model) throw new BadRequestException("Unknown collection");
     return model;
+  }
+
+  private settingKey(key: string): SiteSettingKey {
+    if (!isSiteSettingKey(key)) throw new BadRequestException("Unknown setting key");
+    return key;
   }
 
   private csvCell(value: string) {

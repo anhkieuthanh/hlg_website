@@ -1,15 +1,13 @@
-import { Locale, navigation, withLocale } from "@hlg/shared";
+import { Locale, withLocale } from "@hlg/shared";
 import Link from "next/link";
-import { localized, t } from "../lib/content";
+import type { PublicSiteConfig } from "../lib/public-api";
 import { Reveal, Stagger } from "./MotionPrimitives";
 import { PageTransition } from "./PageTransition";
 
-const capabilityFooterLinks = ["/manufacturing", "/capabilities", "/catalogue", "/construction"];
-const proofFooterLinks = ["/projects", "/news"];
-
-export function SiteChrome({ locale, children }: { locale: Locale; children: React.ReactNode }) {
-  const capabilityLinks = navigation.filter((item) => capabilityFooterLinks.includes(item.href));
-  const proofLinks = navigation.filter((item) => proofFooterLinks.includes(item.href));
+export function SiteChrome({ locale, site, children }: { locale: Locale; site: PublicSiteConfig; children: React.ReactNode }) {
+  const headerLinks = site.navigation.filter((item) => item.placement === "header").sort((a, b) => a.order - b.order);
+  const capabilityLinks = site.navigation.filter((item) => item.placement === "footerCapabilities").sort((a, b) => a.order - b.order);
+  const proofLinks = site.navigation.filter((item) => item.placement === "footerProof").sort((a, b) => a.order - b.order);
   const year = new Date().getFullYear();
 
   return (
@@ -18,19 +16,24 @@ export function SiteChrome({ locale, children }: { locale: Locale; children: Rea
       <header className="topbar">
         <nav className="nav" aria-label="Main navigation">
           <Link className="brand" href={withLocale(locale, "/")}>
-            <img src="/assets/hoang-long-logo.svg" alt="Hoàng Long JSC" />
+            <img src={site.header.logoUrl} alt="Hoàng Long JSC" />
             <span>
-              <small>Manufacturing + Construction</small>
-              Hoàng Long Group
+              <small>{site.header.tagline}</small>
+              {site.header.brandName}
             </span>
           </Link>
           <div className="nav-links">
-            {navigation.map((item) => (
-              <Link key={item.href} href={withLocale(locale, item.href)}>
-                {localized(locale, item.label)}
+            {headerLinks.map((item) => (
+              <Link key={item.id} href={linkHref(locale, item.href)}>
+                {item.label}
               </Link>
             ))}
           </div>
+          {site.header.cta.enabled ? (
+            <Link className="button nav-cta" href={linkHref(locale, site.header.cta.href)}>
+              {site.header.cta.label}
+            </Link>
+          ) : null}
           <div className="locale-switch" aria-label="Language switcher">
             <Link className={locale === "vi" ? "active" : ""} href="/vi" aria-label="Tiếng Việt">
               <span aria-hidden="true">🇻🇳</span>
@@ -47,41 +50,50 @@ export function SiteChrome({ locale, children }: { locale: Locale; children: Rea
       <footer className="footer">
         <Stagger className="container footer-grid" y={14}>
           <div className="footer-brand">
-            <img src="/assets/hoang-long-logo.svg" alt="Hoàng Long JSC" />
+            <img src={site.header.logoUrl} alt="Hoàng Long JSC" />
             <span>
-              <strong>Hoàng Long Group</strong>
-              <p>{t(locale, "footerTagline")}</p>
+              <strong>{site.header.brandName}</strong>
+              <p>{site.footer.brandTagline}</p>
             </span>
           </div>
           <div className="footer-column">
-            <h2>{t(locale, "footerCapabilities")}</h2>
+            <h2>{site.footer.capabilitiesTitle}</h2>
             {capabilityLinks.map((item) => (
-              <Link key={item.href} href={withLocale(locale, item.href)}>
-                {localized(locale, item.label)}
+              <Link key={item.id} href={linkHref(locale, item.href)}>
+                {item.label}
               </Link>
             ))}
           </div>
           <div className="footer-column">
-            <h2>{t(locale, "footerProof")}</h2>
+            <h2>{site.footer.proofTitle}</h2>
             {proofLinks.map((item) => (
-              <Link key={item.href} href={withLocale(locale, item.href)}>
-                {localized(locale, item.label)}
+              <Link key={item.id} href={linkHref(locale, item.href)}>
+                {item.label}
               </Link>
             ))}
-            <p>{t(locale, "footerPendingRecords")}</p>
+            <p>{site.footer.pendingRecords}</p>
           </div>
           <div className="footer-contact">
-            <h2>{t(locale, "footerContact")}</h2>
-            <p>{t(locale, "footerContactCopy")}</p>
-            <Link className="button" href={withLocale(locale, "/contact")}>
-              {t(locale, "partnerCtaPrimary")}
-            </Link>
+            <h2>{site.footer.contactTitle}</h2>
+            <p>{site.footer.contactCopy}</p>
+            {site.footer.contactCta.enabled ? (
+              <Link className="button" href={linkHref(locale, site.footer.contactCta.href)}>
+                {site.footer.contactCta.label}
+              </Link>
+            ) : null}
           </div>
         </Stagger>
         <Reveal className="container footer-bottom" delay={0.12} y={10}>
-          <span>© {year} Hoàng Long Group. {t(locale, "footerCopyright")}</span>
+          <span>
+            © {year} {site.header.brandName}. {site.footer.copyright}
+          </span>
         </Reveal>
       </footer>
     </div>
   );
+}
+
+function linkHref(locale: Locale, href: string) {
+  if (href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:")) return href;
+  return withLocale(locale, href);
 }

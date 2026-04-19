@@ -1,10 +1,12 @@
-import { contentFor, getLocale, localized } from "../../../lib/content";
+import { getLocale, localized } from "../../../lib/content";
 import { ControlFlow, PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
+import { getCapabilities } from "../../../lib/public-api";
 
-export default function ManufacturingPage({ params }: { params: { locale: string } }) {
+export default async function ManufacturingPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
-  const items = contentFor(locale).capabilities.filter((item) => item.type !== "certificate");
+  const capabilities = await getCapabilities(locale);
+  const items = capabilities.filter((item) => item.type !== "certificate");
   return (
     <main>
       <section className="detail-hero">

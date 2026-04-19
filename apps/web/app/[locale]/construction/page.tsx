@@ -1,11 +1,12 @@
 import { ProjectCard } from "../../../components/Cards";
 import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
-import { contentFor, getLocale } from "../../../lib/content";
+import { getLocale } from "../../../lib/content";
+import { getProjects } from "../../../lib/public-api";
 
-export default function ConstructionPage({ params }: { params: { locale: string } }) {
+export default async function ConstructionPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
-  const projects = contentFor(locale).projects;
+  const projects = await getProjects(locale);
   return (
     <main>
       <section className="detail-hero">

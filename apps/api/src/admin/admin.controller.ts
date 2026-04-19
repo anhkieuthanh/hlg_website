@@ -50,6 +50,27 @@ export class AdminController {
     return lead;
   }
 
+  @Get("settings/:key")
+  @Roles(Role.SUPER_ADMIN, Role.CONTENT_EDITOR, Role.VIEWER)
+  setting(@Param("key") key: string) {
+    return this.service.getSetting(key);
+  }
+
+  @Patch("settings/:key")
+  @Roles(Role.SUPER_ADMIN, Role.CONTENT_EDITOR)
+  async updateSetting(@Param("key") key: string, @Body("value") value: unknown, @Req() request: any) {
+    const setting = await this.service.updateSetting(key, value);
+    await this.audit.record({
+      actorId: request.user?.sub,
+      action: "settings.update",
+      entityType: "SiteSetting",
+      entityId: key,
+      metadata: { key },
+      ipAddress: request.ip
+    });
+    return setting;
+  }
+
   @Get(":collection")
   @Roles(Role.SUPER_ADMIN, Role.CONTENT_EDITOR, Role.VIEWER)
   list(@Param("collection") collection: any) {

@@ -1,18 +1,12 @@
 import { notFound } from "next/navigation";
-import { contentFor, getLocale, localized } from "../../../../lib/content";
+import { getLocale, localized } from "../../../../lib/content";
 import { PartnerCta } from "../../../../components/ExperienceSections";
 import { Reveal } from "../../../../components/MotionPrimitives";
+import { getNewsArticle } from "../../../../lib/public-api";
 
-export function generateStaticParams() {
-  return contentFor("vi").news.flatMap((article) => [
-    { locale: "vi", slug: article.slug },
-    ...(article.enPublished ? [{ locale: "en", slug: article.slug }] : [])
-  ]);
-}
-
-export default function NewsDetailPage({ params }: { params: { locale: string; slug: string } }) {
+export default async function NewsDetailPage({ params }: { params: { locale: string; slug: string } }) {
   const locale = getLocale(params.locale);
-  const article = contentFor(locale).news.find((item) => item.slug === params.slug);
+  const article = await getNewsArticle(locale, params.slug);
   if (!article) notFound();
   return (
     <main>

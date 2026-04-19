@@ -1,11 +1,12 @@
 import { NewsCard } from "../../../components/Cards";
 import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
-import { contentFor, getLocale, t } from "../../../lib/content";
+import { getLocale, t } from "../../../lib/content";
+import { getNews } from "../../../lib/public-api";
 
-export default function NewsPage({ params }: { params: { locale: string } }) {
+export default async function NewsPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
-  const content = contentFor(locale);
+  const news = await getNews(locale);
   return (
     <main>
       <section className="detail-hero">
@@ -16,7 +17,7 @@ export default function NewsPage({ params }: { params: { locale: string } }) {
       </section>
       <section className="section">
         <Stagger className="container grid">
-          {content.news.map((article) => (
+          {news.map((article) => (
             <NewsCard key={article.id} locale={locale} article={article} />
           ))}
         </Stagger>

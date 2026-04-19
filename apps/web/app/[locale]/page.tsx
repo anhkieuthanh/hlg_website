@@ -3,11 +3,12 @@ import Link from "next/link";
 import { ProjectCard, NewsCard } from "../../components/Cards";
 import { ControlFlow, PartnerCta, TrustBar } from "../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../components/MotionPrimitives";
-import { contentFor, getLocale, localized, t } from "../../lib/content";
+import { getLocale, localized, t } from "../../lib/content";
+import { getHomeContent } from "../../lib/public-api";
 
-export default function HomePage({ params }: { params: { locale: string } }) {
+export default async function HomePage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
-  const content = contentFor(locale);
+  const content = await getHomeContent(locale);
   const factoryProof = content.capabilities.filter((item) => item.type !== "certificate");
 
   return (
@@ -99,7 +100,7 @@ export default function HomePage({ params }: { params: { locale: string } }) {
             <h2>{t(locale, "catalogueCopy")}</h2>
           </div>
           <ul className="feature-list">
-            {content.catalogueProducts.map((product) => (
+            {content.products.map((product) => (
               <li key={product.id}>
                 <strong>{localized(locale, product.name)}</strong>
                 <p>{localized(locale, product.summary)}</p>

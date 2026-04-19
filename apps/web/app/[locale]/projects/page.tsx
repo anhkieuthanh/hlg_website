@@ -1,11 +1,12 @@
 import { ProjectCard } from "../../../components/Cards";
 import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
-import { contentFor, getLocale, t } from "../../../lib/content";
+import { getLocale, t } from "../../../lib/content";
+import { getProjects } from "../../../lib/public-api";
 
-export default function ProjectsPage({ params }: { params: { locale: string } }) {
+export default async function ProjectsPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
-  const content = contentFor(locale);
+  const projects = await getProjects(locale);
   return (
     <main>
       <section className="detail-hero">
@@ -21,7 +22,7 @@ export default function ProjectsPage({ params }: { params: { locale: string } })
       </section>
       <section className="section">
         <Stagger className="container grid two">
-          {content.projects.map((project) => (
+          {projects.map((project) => (
             <ProjectCard key={project.id} locale={locale} project={project} />
           ))}
         </Stagger>

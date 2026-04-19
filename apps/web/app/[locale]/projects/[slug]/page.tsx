@@ -1,18 +1,12 @@
 import { notFound } from "next/navigation";
-import { contentFor, getLocale, localized, t } from "../../../../lib/content";
+import { getLocale, localized, t } from "../../../../lib/content";
 import { PartnerCta } from "../../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../../components/MotionPrimitives";
+import { getProject } from "../../../../lib/public-api";
 
-export function generateStaticParams() {
-  return contentFor("vi").projects.flatMap((project) => [
-    { locale: "vi", slug: project.slug },
-    ...(project.enPublished ? [{ locale: "en", slug: project.slug }] : [])
-  ]);
-}
-
-export default function ProjectDetailPage({ params }: { params: { locale: string; slug: string } }) {
+export default async function ProjectDetailPage({ params }: { params: { locale: string; slug: string } }) {
   const locale = getLocale(params.locale);
-  const project = contentFor(locale).projects.find((item) => item.slug === params.slug);
+  const project = await getProject(locale, params.slug);
   if (!project) notFound();
   return (
     <main>

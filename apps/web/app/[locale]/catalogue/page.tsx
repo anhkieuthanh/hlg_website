@@ -1,11 +1,12 @@
 import { ProductCard } from "../../../components/Cards";
 import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
-import { contentFor, getLocale, localized, t } from "../../../lib/content";
+import { getLocale, localized, t } from "../../../lib/content";
+import { getCatalogue } from "../../../lib/public-api";
 
-export default function CataloguePage({ params }: { params: { locale: string } }) {
+export default async function CataloguePage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
-  const content = contentFor(locale);
+  const catalogue = await getCatalogue(locale);
   return (
     <main>
       <section className="detail-hero">
@@ -21,7 +22,7 @@ export default function CataloguePage({ params }: { params: { locale: string } }
       </section>
       <section className="section alt">
         <Stagger className="container grid two">
-          {content.catalogueCategories.map((category) => (
+          {catalogue.categories.map((category) => (
             <article className="card" key={category.id}>
               <div className="card-body">
                 <h3>{localized(locale, category.name)}</h3>
@@ -33,7 +34,7 @@ export default function CataloguePage({ params }: { params: { locale: string } }
       </section>
       <section className="section">
         <Stagger className="container grid">
-          {content.catalogueProducts.map((product) => (
+          {catalogue.products.map((product) => (
             <ProductCard key={product.id} locale={locale} product={product} />
           ))}
         </Stagger>
