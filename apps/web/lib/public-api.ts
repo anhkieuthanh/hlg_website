@@ -2,6 +2,8 @@ import { navigation, type Locale } from "@hlg/shared";
 import { localized, t, contentFor } from "./content";
 
 const API_BASE_URL = process.env.HLG_API_URL || "http://127.0.0.1:4001";
+const DEFAULT_REVALIDATE_SECONDS = 600;
+const SITE_REVALIDATE_SECONDS = 300;
 
 export type PublicSiteConfig = {
   header: {
@@ -38,7 +40,7 @@ export type PublicSiteConfig = {
 };
 
 export async function getSiteConfig(locale: Locale): Promise<PublicSiteConfig> {
-  return getPublicJson<PublicSiteConfig>(`/api/public/site?locale=${locale}`, fallbackSiteConfig(locale));
+  return getPublicJson<PublicSiteConfig>(`/api/public/site?locale=${locale}`, fallbackSiteConfig(locale), SITE_REVALIDATE_SECONDS);
 }
 
 export async function getNews(locale: Locale) {
@@ -90,9 +92,9 @@ export async function getCapabilities(locale: Locale) {
   return getPublicJson<any[]>(`/api/public/capabilities?locale=${locale}`, contentFor(locale).capabilities);
 }
 
-async function getPublicJson<T>(path: string, fallback: T): Promise<T> {
+async function getPublicJson<T>(path: string, fallback: T, revalidate = DEFAULT_REVALIDATE_SECONDS): Promise<T> {
   try {
-    const response = await fetch(new URL(path, API_BASE_URL), { cache: "no-store" });
+    const response = await fetch(new URL(path, API_BASE_URL), { next: { revalidate } });
     if (!response.ok) return fallback;
     return response.json();
   } catch {

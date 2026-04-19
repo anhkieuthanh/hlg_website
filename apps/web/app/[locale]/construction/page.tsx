@@ -3,6 +3,20 @@ import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { getLocale } from "../../../lib/content";
 import { getProjects } from "../../../lib/public-api";
+import { localizedMetadata } from "../../../lib/seo";
+
+export function generateMetadata({ params }: { params: { locale: string } }) {
+  const locale = getLocale(params.locale);
+  return localizedMetadata({
+    locale,
+    path: "/construction",
+    title: locale === "vi" ? "Thi công công nghiệp" : "Industrial construction",
+    description:
+      locale === "vi"
+        ? "Thi công công nghiệp trong luồng phối hợp sản xuất, bàn giao cấu kiện, công trường và nghiệm thu."
+        : "Industrial construction within fabrication, component handover, site coordination, and acceptance workflows."
+  });
+}
 
 export default async function ConstructionPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
@@ -21,6 +35,7 @@ export default async function ConstructionPage({ params }: { params: { locale: s
         </Reveal>
       </section>
       <section className="section">
+        <h2 className="sr-only">{locale === "vi" ? "Dự án thi công" : "Construction project list"}</h2>
         <Stagger className="container grid two">
           {projects.map((project) => (
             <ProjectCard key={project.id} locale={locale} project={project} />

@@ -2,7 +2,29 @@ import { notFound } from "next/navigation";
 import { getLocale, localized, t } from "../../../../lib/content";
 import { PartnerCta } from "../../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../../components/MotionPrimitives";
+import { SiteImage } from "../../../../components/SiteImage";
 import { getProject } from "../../../../lib/public-api";
+import { localizedMetadata } from "../../../../lib/seo";
+
+export async function generateMetadata({ params }: { params: { locale: string; slug: string } }) {
+  const locale = getLocale(params.locale);
+  const project = await getProject(locale, params.slug);
+  if (!project) {
+    return localizedMetadata({
+      locale,
+      path: `/projects/${params.slug}`,
+      title: t(locale, "projectsTitle"),
+      description: t(locale, "projectsCopy")
+    });
+  }
+  return localizedMetadata({
+    locale,
+    path: `/projects/${project.slug}`,
+    title: localized(locale, project.title),
+    description: localized(locale, project.excerpt),
+    image: project.heroImage || "/assets/industrial-hero-1440.webp"
+  });
+}
 
 export default async function ProjectDetailPage({ params }: { params: { locale: string; slug: string } }) {
   const locale = getLocale(params.locale);
@@ -19,7 +41,7 @@ export default async function ProjectDetailPage({ params }: { params: { locale: 
       </section>
       <Stagger className="container detail-body">
         <article>
-          <img className="card-media" src={project.heroImage} alt={localized(locale, project.title)} />
+          <SiteImage className="card-media" src={project.heroImage} alt={localized(locale, project.title)} sizes="(max-width: 900px) 100vw, 760px" />
           <p>{localized(locale, project.body)}</p>
           <p>{localized(locale, project.result)}</p>
           <div className="insight-panel">

@@ -1,7 +1,19 @@
 import { getLocale, localized, t } from "../../../lib/content";
 import { ControlFlow, PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
+import { SiteImage } from "../../../components/SiteImage";
 import { getCapabilities } from "../../../lib/public-api";
+import { localizedMetadata } from "../../../lib/seo";
+
+export function generateMetadata({ params }: { params: { locale: string } }) {
+  const locale = getLocale(params.locale);
+  return localizedMetadata({
+    locale,
+    path: "/capabilities",
+    title: t(locale, "capabilitiesTitle"),
+    description: t(locale, "capabilitiesCopy")
+  });
+}
 
 export default async function CapabilitiesPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
@@ -25,10 +37,11 @@ export default async function CapabilitiesPage({ params }: { params: { locale: s
                 : "Each capability group answers a review question: factory readiness, equipment readiness, and control-record readiness."}
             </p>
           </Reveal>
+          <h2 className="sr-only">{locale === "vi" ? "Danh sách năng lực" : "Capability list"}</h2>
           <Stagger className="grid">
             {capabilities.map((item) => (
               <article className="card" key={item.id}>
-                <img className="card-media" src={item.image} alt={localized(locale, item.title)} />
+                <SiteImage className="card-media" src={item.image} alt={localized(locale, item.title)} />
                 <div className="card-body">
                   <div className="meta">
                     <span>{item.type}</span>

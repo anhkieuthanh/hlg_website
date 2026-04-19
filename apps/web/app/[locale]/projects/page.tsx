@@ -3,6 +3,17 @@ import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { getLocale, t } from "../../../lib/content";
 import { getProjects } from "../../../lib/public-api";
+import { localizedMetadata } from "../../../lib/seo";
+
+export function generateMetadata({ params }: { params: { locale: string } }) {
+  const locale = getLocale(params.locale);
+  return localizedMetadata({
+    locale,
+    path: "/projects",
+    title: t(locale, "projectsTitle"),
+    description: t(locale, "projectsCopy")
+  });
+}
 
 export default async function ProjectsPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
@@ -21,6 +32,7 @@ export default async function ProjectsPage({ params }: { params: { locale: strin
         </Reveal>
       </section>
       <section className="section">
+        <h2 className="sr-only">{locale === "vi" ? "Danh sách dự án" : "Project list"}</h2>
         <Stagger className="container grid two">
           {projects.map((project) => (
             <ProjectCard key={project.id} locale={locale} project={project} />

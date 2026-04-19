@@ -1,7 +1,22 @@
 import { getLocale, localized } from "../../../lib/content";
 import { ControlFlow, PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
+import { SiteImage } from "../../../components/SiteImage";
 import { getCapabilities } from "../../../lib/public-api";
+import { localizedMetadata } from "../../../lib/seo";
+
+export function generateMetadata({ params }: { params: { locale: string } }) {
+  const locale = getLocale(params.locale);
+  return localizedMetadata({
+    locale,
+    path: "/manufacturing",
+    title: locale === "vi" ? "Sản xuất kết cấu công nghiệp" : "Industrial structural fabrication",
+    description:
+      locale === "vi"
+        ? "Năng lực nhà máy, thiết bị, kiểm soát lô sản xuất và phối hợp bàn giao của Hoàng Long Group."
+        : "Hoang Long Group factory, equipment, batch control, and handover coordination capability."
+  });
+}
 
 export default async function ManufacturingPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
@@ -30,10 +45,11 @@ export default async function ManufacturingPage({ params }: { params: { locale: 
                 : "Each capability block should later be replaced with real factory photos, equipment records, QC documents, or verified specs."}
             </p>
           </Reveal>
+          <h2 className="sr-only">{locale === "vi" ? "Danh sách bằng chứng sản xuất" : "Manufacturing proof list"}</h2>
           <Stagger className="grid">
             {items.map((item) => (
               <article className="card" key={item.id}>
-                <img className="card-media" src={item.image} alt={localized(locale, item.title)} />
+                <SiteImage className="card-media" src={item.image} alt={localized(locale, item.title)} />
                 <div className="card-body">
                   <div className="meta">
                     <span>{item.type}</span>

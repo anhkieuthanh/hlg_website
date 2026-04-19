@@ -1,6 +1,17 @@
 import { ContactForm } from "../../../components/ContactForm";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { getLocale, t } from "../../../lib/content";
+import { localizedMetadata } from "../../../lib/seo";
+
+export function generateMetadata({ params }: { params: { locale: string } }) {
+  const locale = getLocale(params.locale);
+  return localizedMetadata({
+    locale,
+    path: "/contact",
+    title: t(locale, "contactTitle"),
+    description: t(locale, "contactCopy")
+  });
+}
 
 export default function ContactPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);

@@ -3,6 +3,17 @@ import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { getLocale, localized, t } from "../../../lib/content";
 import { getCatalogue } from "../../../lib/public-api";
+import { localizedMetadata } from "../../../lib/seo";
+
+export function generateMetadata({ params }: { params: { locale: string } }) {
+  const locale = getLocale(params.locale);
+  return localizedMetadata({
+    locale,
+    path: "/catalogue",
+    title: t(locale, "catalogueTitle"),
+    description: t(locale, "catalogueCopy")
+  });
+}
 
 export default async function CataloguePage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
@@ -21,6 +32,7 @@ export default async function CataloguePage({ params }: { params: { locale: stri
         </Reveal>
       </section>
       <section className="section alt">
+        <h2 className="sr-only">{locale === "vi" ? "Danh mục catalogue" : "Catalogue categories"}</h2>
         <Stagger className="container grid two">
           {catalogue.categories.map((category) => (
             <article className="card" key={category.id}>
@@ -33,6 +45,7 @@ export default async function CataloguePage({ params }: { params: { locale: stri
         </Stagger>
       </section>
       <section className="section">
+        <h2 className="sr-only">{locale === "vi" ? "Hạng mục catalogue" : "Catalogue scopes"}</h2>
         <Stagger className="container grid">
           {catalogue.products.map((product) => (
             <ProductCard key={product.id} locale={locale} product={product} />

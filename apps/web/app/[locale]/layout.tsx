@@ -3,7 +3,9 @@ import { SiteChrome } from "../../components/SiteChrome";
 import { getLocale } from "../../lib/content";
 import { getSiteConfig } from "../../lib/public-api";
 
-export const dynamic = "force-dynamic";
+export function generateStaticParams() {
+  return [{ locale: "vi" }, { locale: "en" }];
+}
 
 export default async function LocaleLayout({
   children,

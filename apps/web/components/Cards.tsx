@@ -1,11 +1,12 @@
 import { Locale, withLocale } from "@hlg/shared";
 import Link from "next/link";
 import { localized, t } from "../lib/content";
+import { SiteImage } from "./SiteImage";
 
 export function ProjectCard({ locale, project }: { locale: Locale; project: any }) {
   return (
     <Link className="card" href={withLocale(locale, `/projects/${project.slug}`)}>
-      <img className="card-media" src={project.heroImage || "/assets/industrial-hero.png"} alt={localized(locale, project.title)} />
+      <SiteImage className="card-media" src={project.heroImage} alt={localized(locale, project.title)} />
       <div className="card-body">
         <div className="meta">
           <span>{project.year}</span>
@@ -22,7 +23,7 @@ export function ProjectCard({ locale, project }: { locale: Locale; project: any 
 export function ProductCard({ locale, product }: { locale: Locale; product: any }) {
   return (
     <Link className="card" href={withLocale(locale, `/catalogue/${product.slug}`)}>
-      <img className="card-media" src={product.image || "/assets/industrial-hero.png"} alt={localized(locale, product.name)} />
+      <SiteImage className="card-media" src={product.image} alt={localized(locale, product.name)} />
       <div className="card-body">
         <h3>{localized(locale, product.name)}</h3>
         <p>{localized(locale, product.summary)}</p>
@@ -34,7 +35,7 @@ export function ProductCard({ locale, product }: { locale: Locale; product: any 
 export function NewsCard({ locale, article }: { locale: Locale; article: any }) {
   return (
     <Link className="card" href={withLocale(locale, `/news/${article.slug}`)}>
-      <img className="card-media" src={article.image || "/assets/industrial-hero.png"} alt={localized(locale, article.title)} />
+      <SiteImage className="card-media" src={article.image} alt={localized(locale, article.title)} />
       <div className="card-body">
         <div className="meta">
           <span>{localized(locale, article.category)}</span>

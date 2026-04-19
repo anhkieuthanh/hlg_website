@@ -1,6 +1,7 @@
 import { Locale, withLocale } from "@hlg/shared";
 import Link from "next/link";
 import type { PublicSiteConfig } from "../lib/public-api";
+import { MobileNav } from "./MobileNav";
 import { Reveal, Stagger } from "./MotionPrimitives";
 import { PageTransition } from "./PageTransition";
 
@@ -44,6 +45,7 @@ export function SiteChrome({ locale, site, children }: { locale: Locale; site: P
               <span className="sr-only">English</span>
             </Link>
           </div>
+          <MobileNav locale={locale} links={headerLinks} cta={site.header.cta} />
         </nav>
       </header>
       {children}

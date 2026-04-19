@@ -16,12 +16,23 @@ async function proxy(request: NextRequest, context: RouteContext) {
   const headers = new Headers(request.headers);
   headers.delete("host");
 
-  const upstreamResponse = await fetch(upstreamUrl, {
-    method: request.method,
-    headers,
-    body: request.method === "GET" || request.method === "HEAD" ? undefined : await request.text(),
-    cache: "no-store"
-  });
+  let upstreamResponse: Response;
+  try {
+    upstreamResponse = await fetch(upstreamUrl, {
+      method: request.method,
+      headers,
+      body: request.method === "GET" || request.method === "HEAD" ? undefined : await request.text(),
+      cache: request.method === "GET" || request.method === "HEAD" ? "default" : "no-store"
+    });
+  } catch {
+    return Response.json(
+      {
+        ok: false,
+        error: "upstream_unavailable"
+      },
+      { status: 503 }
+    );
+  }
 
   const responseHeaders = new Headers();
   const contentType = upstreamResponse.headers.get("content-type");

@@ -6,6 +6,7 @@ import { t } from "../lib/content";
 
 export function ContactForm({ locale }: { locale: Locale }) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const sendingCopy = locale === "vi" ? "Đang gửi..." : "Sending...";
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,10 +55,12 @@ export function ContactForm({ locale }: { locale: Locale }) {
         <textarea name="message" required />
       </label>
       <button className="button" type="submit" disabled={state === "sending"}>
-        {state === "sending" ? "..." : t(locale, "submit")}
+        {state === "sending" ? sendingCopy : t(locale, "submit")}
       </button>
-      {state === "sent" ? <p>{locale === "vi" ? "Đã gửi liên hệ." : "Inquiry sent."}</p> : null}
-      {state === "error" ? <p>{locale === "vi" ? "Chưa gửi được, vui lòng thử lại." : "Could not send. Please try again."}</p> : null}
+      <p aria-live="polite" className="form-status">
+        {state === "sent" ? (locale === "vi" ? "Đã gửi liên hệ." : "Inquiry sent.") : null}
+        {state === "error" ? (locale === "vi" ? "Chưa gửi được, vui lòng thử lại." : "Could not send. Please try again.") : null}
+      </p>
     </form>
   );
 }

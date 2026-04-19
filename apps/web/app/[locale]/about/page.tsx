@@ -1,6 +1,20 @@
 import { getLocale } from "../../../lib/content";
 import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
+import { localizedMetadata } from "../../../lib/seo";
+
+export function generateMetadata({ params }: { params: { locale: string } }) {
+  const locale = getLocale(params.locale);
+  return localizedMetadata({
+    locale,
+    path: "/about",
+    title: locale === "vi" ? "Giới thiệu Hoàng Long Group" : "About Hoang Long Group",
+    description:
+      locale === "vi"
+        ? "Hồ sơ năng lực B2B của Hoàng Long Group cho sản xuất kết cấu, thi công và quản lý dự án công nghiệp."
+        : "Hoang Long Group B2B capability profile for structural fabrication, construction, and industrial project coordination."
+  });
+}
 
 export default function AboutPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);

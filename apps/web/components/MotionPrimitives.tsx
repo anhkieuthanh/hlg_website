@@ -1,8 +1,5 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-import { Children, useEffect, useState } from "react";
-import type { ReactNode } from "react";
+import { Children } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 type RevealProps = {
   children: ReactNode;
@@ -12,77 +9,25 @@ type RevealProps = {
 };
 
 export function Reveal({ children, className, delay = 0, y = 18 }: RevealProps) {
-  const reducedMotion = useReducedMotion();
-  const mounted = useMounted();
-  const enabled = mounted && !reducedMotion;
-
   return (
-    <motion.div
-      className={className}
-      initial={enabled ? { opacity: 0, y } : false}
-      whileInView={enabled ? { opacity: 1, y: 0 } : undefined}
-      viewport={{ once: true, amount: 0.18 }}
-      transition={{ duration: 0.45, delay, ease: "easeOut" }}
-    >
+    <div className={className} style={motionVars(delay, y)}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
 export function Stagger({ children, className, delay = 0, y = 18 }: RevealProps) {
-  const reducedMotion = useReducedMotion();
-  const mounted = useMounted();
-  const enabled = mounted && !reducedMotion;
-
   return (
-    <motion.div
-      className={className}
-      initial={enabled ? "hidden" : false}
-      whileInView={enabled ? "show" : undefined}
-      viewport={{ once: true, amount: 0.14 }}
-      variants={
-        enabled
-          ? {
-              hidden: {},
-              show: {
-                transition: {
-                  delayChildren: delay,
-                  staggerChildren: 0.08
-                }
-              }
-            }
-          : undefined
-      }
-    >
-      {motionChildren(children, y, enabled)}
-    </motion.div>
+    <div className={className} style={motionVars(delay, y)}>
+      {Children.map(children, (child, index) => (
+        <div className="motion-item" style={{ "--motion-index": index } as CSSProperties}>
+          {child}
+        </div>
+      ))}
+    </div>
   );
 }
 
-function useMounted() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  return mounted;
-}
-
-function motionChildren(children: ReactNode, y: number, enabled: boolean) {
-  return Children.map(children, (child) => (
-    <motion.div
-      className="motion-item"
-      variants={
-        enabled
-          ? {
-              hidden: { opacity: 0, y },
-              show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } }
-            }
-          : undefined
-      }
-    >
-      {child}
-    </motion.div>
-  ));
+function motionVars(delay: number, y: number) {
+  return { "--motion-delay": `${delay}s`, "--motion-y": `${y}px` } as CSSProperties;
 }

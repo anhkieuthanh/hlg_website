@@ -986,8 +986,9 @@ function NewsForm({ article, token, onCancel, onSaved }: { article: NewsArticle 
     >
       <FormSection title="Nội dung chính">
         <CommonFields token={token} form={form} setForm={setForm} titleLabel="Tiêu đề" imageLabel="Ảnh đại diện URL" />
-        <TextPair labelVi="Excerpt VI" labelEn="Excerpt EN" vi={form.excerptVi} en={form.excerptEn} onVi={(value) => patch(setForm, { excerptVi: value })} onEn={(value) => patch(setForm, { excerptEn: value })} />
+        <TextPair showEnglish={form.enPublished} labelVi="Excerpt VI" labelEn="Excerpt EN" vi={form.excerptVi} en={form.excerptEn} onVi={(value) => patch(setForm, { excerptVi: value })} onEn={(value) => patch(setForm, { excerptEn: value })} />
         <TextPair
+          showEnglish={form.enPublished}
           textarea
           rows={9}
           labelVi="Nội dung VI"
@@ -1000,7 +1001,7 @@ function NewsForm({ article, token, onCancel, onSaved }: { article: NewsArticle 
       </FormSection>
       <FormSection title="Thông tin phân loại">
         <div className="form-grid two">
-          <TextPair labelVi="Danh mục VI" labelEn="Category EN" vi={form.categoryVi} en={form.categoryEn} onVi={(value) => patch(setForm, { categoryVi: value })} onEn={(value) => patch(setForm, { categoryEn: value })} />
+          <TextPair showEnglish={form.enPublished} labelVi="Danh mục VI" labelEn="Category EN" vi={form.categoryVi} en={form.categoryEn} onVi={(value) => patch(setForm, { categoryVi: value })} onEn={(value) => patch(setForm, { categoryEn: value })} />
           <Field label="Tags, phân tách bằng dấu phẩy" value={form.tags} onChange={(value) => patch(setForm, { tags: value })} />
         </div>
       </FormSection>
@@ -1025,16 +1026,16 @@ function ProjectForm({ project, token, onCancel, onSaved }: { project: ProjectIt
     >
       <FormSection title="Nội dung chính">
         <CommonFields token={token} form={form} setForm={setForm} titleLabel="Tên dự án" imageLabel="Hero image URL" imageField="heroImage" />
-        <TextPair labelVi="Excerpt VI" labelEn="Excerpt EN" vi={form.excerptVi} en={form.excerptEn} onVi={(value) => patch(setForm, { excerptVi: value })} onEn={(value) => patch(setForm, { excerptEn: value })} />
-        <TextPair textarea rows={7} labelVi="Body VI" labelEn="Body EN" vi={form.bodyVi} en={form.bodyEn} onVi={(value) => patch(setForm, { bodyVi: value })} onEn={(value) => patch(setForm, { bodyEn: value })} />
+        <TextPair showEnglish={form.enPublished} labelVi="Excerpt VI" labelEn="Excerpt EN" vi={form.excerptVi} en={form.excerptEn} onVi={(value) => patch(setForm, { excerptVi: value })} onEn={(value) => patch(setForm, { excerptEn: value })} />
+        <TextPair showEnglish={form.enPublished} textarea rows={7} labelVi="Body VI" labelEn="Body EN" vi={form.bodyVi} en={form.bodyEn} onVi={(value) => patch(setForm, { bodyVi: value })} onEn={(value) => patch(setForm, { bodyEn: value })} />
       </FormSection>
       <FormSection title="Thông tin dự án">
         <div className="form-grid two">
-          <TextPair labelVi="Sector VI" labelEn="Sector EN" vi={form.sectorVi} en={form.sectorEn} onVi={(value) => patch(setForm, { sectorVi: value })} onEn={(value) => patch(setForm, { sectorEn: value })} />
-          <TextPair labelVi="Location VI" labelEn="Location EN" vi={form.locationVi} en={form.locationEn} onVi={(value) => patch(setForm, { locationVi: value })} onEn={(value) => patch(setForm, { locationEn: value })} />
-          <TextPair labelVi="Scale VI" labelEn="Scale EN" vi={form.scaleVi} en={form.scaleEn} onVi={(value) => patch(setForm, { scaleVi: value })} onEn={(value) => patch(setForm, { scaleEn: value })} />
-          <TextPair labelVi="Role VI" labelEn="Role EN" vi={form.roleVi} en={form.roleEn} onVi={(value) => patch(setForm, { roleVi: value })} onEn={(value) => patch(setForm, { roleEn: value })} />
-          <TextPair labelVi="Result VI" labelEn="Result EN" vi={form.resultVi} en={form.resultEn} onVi={(value) => patch(setForm, { resultVi: value })} onEn={(value) => patch(setForm, { resultEn: value })} />
+          <TextPair showEnglish={form.enPublished} labelVi="Sector VI" labelEn="Sector EN" vi={form.sectorVi} en={form.sectorEn} onVi={(value) => patch(setForm, { sectorVi: value })} onEn={(value) => patch(setForm, { sectorEn: value })} />
+          <TextPair showEnglish={form.enPublished} labelVi="Location VI" labelEn="Location EN" vi={form.locationVi} en={form.locationEn} onVi={(value) => patch(setForm, { locationVi: value })} onEn={(value) => patch(setForm, { locationEn: value })} />
+          <TextPair showEnglish={form.enPublished} labelVi="Scale VI" labelEn="Scale EN" vi={form.scaleVi} en={form.scaleEn} onVi={(value) => patch(setForm, { scaleVi: value })} onEn={(value) => patch(setForm, { scaleEn: value })} />
+          <TextPair showEnglish={form.enPublished} labelVi="Role VI" labelEn="Role EN" vi={form.roleVi} en={form.roleEn} onVi={(value) => patch(setForm, { roleVi: value })} onEn={(value) => patch(setForm, { roleEn: value })} />
+          <TextPair showEnglish={form.enPublished} labelVi="Result VI" labelEn="Result EN" vi={form.resultVi} en={form.resultEn} onVi={(value) => patch(setForm, { resultVi: value })} onEn={(value) => patch(setForm, { resultEn: value })} />
           <Field label="Năm" value={form.year} onChange={(value) => patch(setForm, { year: value })} />
           <TextArea label="Gallery URLs, mỗi dòng một URL" value={form.gallery} onChange={(value) => patch(setForm, { gallery: value })} />
           <label className="check-row">
@@ -1064,12 +1065,12 @@ function CapabilityForm({ capability, token, onCancel, onSaved }: { capability: 
     >
       <FormSection title="Nội dung năng lực">
         <CommonFields token={token} form={form} setForm={setForm} titleLabel="Tiêu đề năng lực" imageLabel="Image URL" slug={false} excerpt={false} />
-        <TextPair textarea rows={5} labelVi="Description VI" labelEn="Description EN" vi={form.descriptionVi} en={form.descriptionEn} onVi={(value) => patch(setForm, { descriptionVi: value })} onEn={(value) => patch(setForm, { descriptionEn: value })} />
+        <TextPair showEnglish={form.enPublished} textarea rows={5} labelVi="Description VI" labelEn="Description EN" vi={form.descriptionVi} en={form.descriptionEn} onVi={(value) => patch(setForm, { descriptionVi: value })} onEn={(value) => patch(setForm, { descriptionEn: value })} />
       </FormSection>
       <FormSection title="Phân loại và chỉ số">
         <div className="form-grid two">
           <Field label="Type" value={form.type} onChange={(value) => patch(setForm, { type: value })} />
-          <TextPair labelVi="Metric VI" labelEn="Metric EN" vi={form.metricVi} en={form.metricEn} onVi={(value) => patch(setForm, { metricVi: value })} onEn={(value) => patch(setForm, { metricEn: value })} />
+          <TextPair showEnglish={form.enPublished} labelVi="Metric VI" labelEn="Metric EN" vi={form.metricVi} en={form.metricEn} onVi={(value) => patch(setForm, { metricVi: value })} onEn={(value) => patch(setForm, { metricEn: value })} />
         </div>
       </FormSection>
     </ContentEditor>
@@ -1093,7 +1094,7 @@ function CategoryForm({ category, token, onCancel, onSaved }: { category: Catalo
     >
       <FormSection title="Nội dung danh mục">
         <CommonFields token={token} form={form} setForm={setForm} titleLabel="Tên danh mục" image={false} excerpt={false} />
-        <TextPair textarea rows={5} labelVi="Description VI" labelEn="Description EN" vi={form.descriptionVi} en={form.descriptionEn} onVi={(value) => patch(setForm, { descriptionVi: value })} onEn={(value) => patch(setForm, { descriptionEn: value })} />
+        <TextPair showEnglish={form.enPublished} textarea rows={5} labelVi="Description VI" labelEn="Description EN" vi={form.descriptionVi} en={form.descriptionEn} onVi={(value) => patch(setForm, { descriptionVi: value })} onEn={(value) => patch(setForm, { descriptionEn: value })} />
       </FormSection>
     </ContentEditor>
   );
@@ -1128,7 +1129,7 @@ function ProductForm({
     >
       <FormSection title="Nội dung hạng mục">
         <CommonFields token={token} form={form} setForm={setForm} titleLabel="Tên hạng mục" imageLabel="Image URL" />
-        <TextPair labelVi="Summary VI" labelEn="Summary EN" vi={form.summaryVi} en={form.summaryEn} onVi={(value) => patch(setForm, { summaryVi: value })} onEn={(value) => patch(setForm, { summaryEn: value })} />
+        <TextPair showEnglish={form.enPublished} labelVi="Summary VI" labelEn="Summary EN" vi={form.summaryVi} en={form.summaryEn} onVi={(value) => patch(setForm, { summaryVi: value })} onEn={(value) => patch(setForm, { summaryEn: value })} />
       </FormSection>
       <FormSection title="Danh mục và specs">
         <label className="field">
@@ -1141,7 +1142,7 @@ function ProductForm({
             ))}
           </select>
         </label>
-        <SpecsEditor specs={form.specs} onChange={(specs) => patch(setForm, { specs })} />
+        <SpecsEditor showEnglish={form.enPublished} specs={form.specs} onChange={(specs) => patch(setForm, { specs })} />
       </FormSection>
     </ContentEditor>
   );
@@ -1203,31 +1204,34 @@ function ContentEditor<TForm extends Record<string, any>>({
           </div>
         </div>
         {error ? <p className="notice">{error}</p> : null}
+        <FormSection title="Ngôn ngữ">
+          <label className="language-toggle">
+            <input
+              type="checkbox"
+              checked={!!form.enPublished}
+              onChange={(event) => patch(setForm, { enPublished: event.target.checked } as unknown as Partial<TForm>)}
+            />
+            <span>
+              <strong>Bật nội dung tiếng Anh</strong>
+              <small>{form.enPublished ? "Các trường EN đang được hiển thị và sẽ có thể xuất bản ở locale EN." : "Form chỉ hiển thị nội dung tiếng Việt. Dữ liệu EN cũ nếu có sẽ được giữ lại."}</small>
+            </span>
+          </label>
+        </FormSection>
         <div className="form-stack">{children}</div>
         <FormSection title="Xuất bản">
-          <div className="form-grid two">
-            <label className="field">
-              Trạng thái
-              <select
-                value={form.status}
-                onChange={(event) => patch(setForm, { status: event.target.value as PublishStatus } as unknown as Partial<TForm>)}
-              >
-                <option value="draft">draft</option>
-                <option value="published">published</option>
-                <option value="archived">archived</option>
-              </select>
-            </label>
-            <label className="check-row">
-              <input
-                type="checkbox"
-                checked={!!form.enPublished}
-                onChange={(event) => patch(setForm, { enPublished: event.target.checked } as unknown as Partial<TForm>)}
-              />
-              Hiển thị bản tiếng Anh
-            </label>
-          </div>
+          <label className="field">
+            Trạng thái
+            <select
+              value={form.status}
+              onChange={(event) => patch(setForm, { status: event.target.value as PublishStatus } as unknown as Partial<TForm>)}
+            >
+              <option value="draft">draft</option>
+              <option value="published">published</option>
+              <option value="archived">archived</option>
+            </select>
+          </label>
         </FormSection>
-        <SeoSection form={form} setForm={setForm} />
+        <SeoSection showEnglish={form.enPublished} form={form} setForm={setForm} />
       </section>
       <aside className="panel preview-panel">{preview}</aside>
     </div>
@@ -1257,7 +1261,15 @@ function CommonFields({
 }) {
   return (
     <div className="form-grid two">
-      <TextPair labelVi={`${titleLabel} VI`} labelEn={`${titleLabel} EN`} vi={form.titleVi} en={form.titleEn} onVi={(value) => patch(setForm, { titleVi: value })} onEn={(value) => patch(setForm, { titleEn: value })} />
+      <TextPair
+        showEnglish={form.enPublished}
+        labelVi={`${titleLabel} VI`}
+        labelEn={`${titleLabel} EN`}
+        vi={form.titleVi}
+        en={form.titleEn}
+        onVi={(value) => patch(setForm, { titleVi: value })}
+        onEn={(value) => patch(setForm, { titleEn: value })}
+      />
       {slug ? (
         <div className="field with-action">
           <label>Slug</label>
@@ -1278,6 +1290,7 @@ function CommonFields({
 }
 
 function TextPair({
+  showEnglish = true,
   labelVi,
   labelEn,
   vi,
@@ -1287,6 +1300,7 @@ function TextPair({
   textarea = false,
   rows = 4
 }: {
+  showEnglish?: boolean;
   labelVi: string;
   labelEn: string;
   vi: string;
@@ -1299,7 +1313,7 @@ function TextPair({
   return (
     <>
       {textarea ? <TextArea rows={rows} label={labelVi} value={vi} onChange={onVi} /> : <Field label={labelVi} value={vi} onChange={onVi} />}
-      {textarea ? <TextArea rows={rows} label={labelEn} value={en} onChange={onEn} /> : <Field label={labelEn} value={en} onChange={onEn} />}
+      {showEnglish ? (textarea ? <TextArea rows={rows} label={labelEn} value={en} onChange={onEn} /> : <Field label={labelEn} value={en} onChange={onEn} />) : null}
     </>
   );
 }
@@ -1313,14 +1327,14 @@ function FormSection({ title, children }: { title: string; children: ReactNode }
   );
 }
 
-function SeoSection({ form, setForm }: { form: any; setForm: React.Dispatch<React.SetStateAction<any>> }) {
+function SeoSection({ showEnglish, form, setForm }: { showEnglish: boolean; form: any; setForm: React.Dispatch<React.SetStateAction<any>> }) {
   return (
     <FormSection title="SEO">
       <div className="form-grid two">
         <Field label="SEO title VI" value={form.seoTitleVi || ""} onChange={(value) => patch(setForm, { seoTitleVi: value })} />
-        <Field label="SEO title EN" value={form.seoTitleEn || ""} onChange={(value) => patch(setForm, { seoTitleEn: value })} />
         <TextArea label="SEO description VI" value={form.seoDescriptionVi || ""} onChange={(value) => patch(setForm, { seoDescriptionVi: value })} />
-        <TextArea label="SEO description EN" value={form.seoDescriptionEn || ""} onChange={(value) => patch(setForm, { seoDescriptionEn: value })} />
+        {showEnglish ? <Field label="SEO title EN" value={form.seoTitleEn || ""} onChange={(value) => patch(setForm, { seoTitleEn: value })} /> : null}
+        {showEnglish ? <TextArea label="SEO description EN" value={form.seoDescriptionEn || ""} onChange={(value) => patch(setForm, { seoDescriptionEn: value })} /> : null}
       </div>
     </FormSection>
   );
@@ -1349,7 +1363,7 @@ function MediaUrlField({ token, label, value, onChange }: { token: string; label
   );
 }
 
-function SpecsEditor({ specs, onChange }: { specs: SpecRow[]; onChange: (specs: SpecRow[]) => void }) {
+function SpecsEditor({ showEnglish, specs, onChange }: { showEnglish: boolean; specs: SpecRow[]; onChange: (specs: SpecRow[]) => void }) {
   const rows = specs.length ? specs : [{ label: { vi: "", en: "" }, value: { vi: "", en: "" } }];
   function update(index: number, patch: Partial<SpecRow>) {
     onChange(rows.map((row, current) => (current === index ? { ...row, ...patch } : row)));
@@ -1363,11 +1377,11 @@ function SpecsEditor({ specs, onChange }: { specs: SpecRow[]; onChange: (specs: 
         </button>
       </div>
       {rows.map((row, index) => (
-        <div className="spec-row" key={index}>
+        <div className={showEnglish ? "spec-row" : "spec-row vi-only"} key={index}>
           <input placeholder="Label VI" value={row.label.vi} onChange={(event) => update(index, { label: { ...row.label, vi: event.target.value } })} />
-          <input placeholder="Label EN" value={row.label.en || ""} onChange={(event) => update(index, { label: { ...row.label, en: event.target.value } })} />
           <input placeholder="Value VI" value={row.value.vi} onChange={(event) => update(index, { value: { ...row.value, vi: event.target.value } })} />
-          <input placeholder="Value EN" value={row.value.en || ""} onChange={(event) => update(index, { value: { ...row.value, en: event.target.value } })} />
+          {showEnglish ? <input placeholder="Label EN" value={row.label.en || ""} onChange={(event) => update(index, { label: { ...row.label, en: event.target.value } })} /> : null}
+          {showEnglish ? <input placeholder="Value EN" value={row.value.en || ""} onChange={(event) => update(index, { value: { ...row.value, en: event.target.value } })} /> : null}
           <button className="button danger" type="button" onClick={() => onChange(rows.filter((_, current) => current !== index))}>
             Xoá
           </button>
