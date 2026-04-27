@@ -36,9 +36,11 @@ export function SiteChrome({ locale, site, children }: { locale: Locale; site: P
                 </Link>
               ))}
             </div>
-            <Link className="button nav-cta" href={linkHref(locale, site.header.cta.href)}>
-              {site.header.cta.label}
-            </Link>
+            {site.header.cta.enabled ? (
+              <Link className="button nav-cta" href={linkHref(locale, site.header.cta.href)}>
+                {site.header.cta.label}
+              </Link>
+            ) : null}
             <div className="locale-switch" aria-label="Language switcher">
               <Link className={locale === "vi" ? "active" : ""} href="/vi" aria-label="Tiếng Việt">
                 <span aria-hidden="true">🇻🇳</span>

@@ -28,7 +28,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
   }
 
   return (
-    <form className="form" method="post" onSubmit={onSubmit} noValidate>
+    <form className="form" method="post" onSubmit={onSubmit}>
       <div className="form-row">
         <label className="field">
           <span>{t(locale, "name")} <abbr title={locale === "vi" ? "Bắt buộc" : "Required"}>*</abbr></span>
