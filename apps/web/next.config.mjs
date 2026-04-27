@@ -8,7 +8,8 @@ const nextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
-      { protocol: "https", hostname: "**" }
+      { protocol: "https", hostname: "*.hoanglonggroup.vn" },
+      { protocol: "https", hostname: "hoanglonggroup.vn" }
     ]
   }
 };

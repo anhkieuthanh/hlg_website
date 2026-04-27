@@ -33,7 +33,7 @@ export default async function NewsDetailPage({ params }: { params: { locale: str
       <Reveal className="container detail-body">
         <article>
           <div className="card-media-wrap">
-            <Image className="card-media" src={article.image} alt={localized(locale, article.title)} fill priority sizes="(max-width: 768px) 100vw, 60vw" />
+            <Image className="card-media" src={article.image || "/assets/industrial-hero.png"} alt={localized(locale, article.title)} fill priority sizes="(max-width: 768px) 100vw, 60vw" />
           </div>
           <p>{localized(locale, article.body)}</p>
         </article>

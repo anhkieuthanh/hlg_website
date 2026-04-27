@@ -33,7 +33,7 @@ export default async function ProductDetailPage({ params }: { params: { locale: 
       <Stagger className="container detail-body">
         <article>
           <div className="card-media-wrap">
-            <Image className="card-media" src={product.image} alt={localized(locale, product.name)} fill priority sizes="(max-width: 768px) 100vw, 60vw" />
+            <Image className="card-media" src={product.image || "/assets/industrial-hero.png"} alt={localized(locale, product.name)} fill priority sizes="(max-width: 768px) 100vw, 60vw" />
           </div>
           <p>{localized(locale, product.summary)}</p>
           <div className="insight-panel">
