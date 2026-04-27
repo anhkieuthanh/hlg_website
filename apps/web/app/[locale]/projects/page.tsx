@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import { ProjectCard } from "../../../components/Cards";
 import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { getLocale, t } from "../../../lib/content";
 import { getProjects } from "../../../lib/public-api";
+
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = getLocale(params.locale);
+  return {
+    title: locale === "vi" ? "Du an tieu bieu" : "Signature Projects",
+    description: t(locale, "projectsCopy")
+  };
+}
 
 export default async function ProjectsPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);

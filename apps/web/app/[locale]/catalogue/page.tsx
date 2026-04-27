@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import { ProductCard } from "../../../components/Cards";
 import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { getLocale, localized, t } from "../../../lib/content";
 import { getCatalogue } from "../../../lib/public-api";
+
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = getLocale(params.locale);
+  return {
+    title: locale === "vi" ? "Catalogue" : "Catalogue",
+    description: t(locale, "catalogueCopy")
+  };
+}
 
 export default async function CataloguePage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);

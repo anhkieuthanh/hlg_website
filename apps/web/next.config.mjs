@@ -4,6 +4,12 @@ const nextConfig = {
   output: process.env.NEXT_OUTPUT || undefined,
   experimental: {
     typedRoutes: false
+  },
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      { protocol: "https", hostname: "**" }
+    ]
   }
 };
 

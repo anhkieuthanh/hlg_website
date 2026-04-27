@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
 import { getLocale } from "../../../lib/content";
 import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
+
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = getLocale(params.locale);
+  return {
+    title: locale === "vi" ? "Gioi thieu" : "About",
+    description:
+      locale === "vi"
+        ? "Hoang Long Group ket noi kinh nghiem san xuat, thi cong va quan ly du an de phuc vu khach hang cong nghiep."
+        : "Hoang Long Group connects manufacturing, construction, and project management experience for industrial customers."
+  };
+}
 
 export default function AboutPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);

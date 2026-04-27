@@ -1,8 +1,21 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getLocale, localized, t } from "../../../../lib/content";
 import { PartnerCta } from "../../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../../components/MotionPrimitives";
 import { getProject } from "../../../../lib/public-api";
+
+export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
+  const locale = getLocale(params.locale);
+  const project = await getProject(locale, params.slug);
+  if (!project) return {};
+  return {
+    title: localized(locale, project.title),
+    description: localized(locale, project.excerpt),
+    openGraph: { images: project.heroImage ? [{ url: project.heroImage }] : undefined }
+  };
+}
 
 export default async function ProjectDetailPage({ params }: { params: { locale: string; slug: string } }) {
   const locale = getLocale(params.locale);
@@ -19,7 +32,9 @@ export default async function ProjectDetailPage({ params }: { params: { locale: 
       </section>
       <Stagger className="container detail-body">
         <article>
-          <img className="card-media" src={project.heroImage} alt={localized(locale, project.title)} />
+          <div className="card-media-wrap">
+            <Image className="card-media" src={project.heroImage} alt={localized(locale, project.title)} fill priority sizes="(max-width: 768px) 100vw, 60vw" />
+          </div>
           <p>{localized(locale, project.body)}</p>
           <p>{localized(locale, project.result)}</p>
           <div className="insight-panel">

@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import { ContactForm } from "../../../components/ContactForm";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { getLocale, t } from "../../../lib/content";
+
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = getLocale(params.locale);
+  return {
+    title: locale === "vi" ? "Lien he" : "Contact",
+    description: t(locale, "contactCopy")
+  };
+}
 
 export default function ContactPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);

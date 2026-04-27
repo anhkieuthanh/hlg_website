@@ -1,7 +1,20 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import { getLocale, localized } from "../../../lib/content";
 import { ControlFlow, PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { getCapabilities } from "../../../lib/public-api";
+
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = getLocale(params.locale);
+  return {
+    title: locale === "vi" ? "San xuat" : "Manufacturing",
+    description:
+      locale === "vi"
+        ? "Nang luc nha may va thiet bi cho ket cau cong nghiep."
+        : "Factory and equipment capabilities for industrial structures."
+  };
+}
 
 export default async function ManufacturingPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
@@ -33,7 +46,9 @@ export default async function ManufacturingPage({ params }: { params: { locale: 
           <Stagger className="grid">
             {items.map((item) => (
               <article className="card" key={item.id}>
-                <img className="card-media" src={item.image} alt={localized(locale, item.title)} />
+                <div className="card-media-wrap">
+                  <Image className="card-media" src={item.image} alt={localized(locale, item.title)} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                </div>
                 <div className="card-body">
                   <div className="meta">
                     <span>{item.type}</span>

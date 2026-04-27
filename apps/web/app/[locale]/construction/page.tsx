@@ -1,8 +1,20 @@
+import type { Metadata } from "next";
 import { ProjectCard } from "../../../components/Cards";
 import { PartnerCta } from "../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../components/MotionPrimitives";
 import { getLocale } from "../../../lib/content";
 import { getProjects } from "../../../lib/public-api";
+
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = getLocale(params.locale);
+  return {
+    title: locale === "vi" ? "Xay dung" : "Construction",
+    description:
+      locale === "vi"
+        ? "Thi cong cong nghiep co kiem soat tien do va chat luong."
+        : "Industrial construction with schedule and quality control."
+  };
+}
 
 export default async function ConstructionPage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
