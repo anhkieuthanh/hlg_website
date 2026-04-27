@@ -9,10 +9,13 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: { locale: Locale } }): Promise<Metadata> {
   const locale = getLocale(params.locale);
   return {
-    title:
-      locale === "vi"
-        ? "Hoang Long Group — San xuat ket cau & Thi cong cong nghiep"
-        : "Hoang Long Group — Structural Fabrication & Industrial Construction",
+    title: {
+      default:
+        locale === "vi"
+          ? "Hoang Long Group — San xuat ket cau & Thi cong cong nghiep"
+          : "Hoang Long Group — Structural Fabrication & Industrial Construction",
+      template: "%s | Hoang Long Group"
+    },
     description: t(locale, "heroCopy"),
     alternates: {
       canonical: `/${locale}`,
