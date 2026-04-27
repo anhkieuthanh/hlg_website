@@ -50,7 +50,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
             {factoryProof.map((item) => (
               <article className="card" key={item.id}>
                 <div className="card-media-wrap">
-                  <Image className="card-media" src={item.image} alt={localized(locale, item.title)} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                  <Image className="card-media" src={item.image || "/assets/industrial-hero.png"} alt={localized(locale, item.title)} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
                 </div>
                 <div className="card-body">
                   <div className="meta">
