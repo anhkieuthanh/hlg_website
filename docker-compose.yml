@@ -1,76 +1,62 @@
+version: "3.9"
+
 services:
   db:
     image: postgres:16-alpine
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:55432:5432"
     environment:
-      POSTGRES_DB: hlg
       POSTGRES_USER: hlg
-      POSTGRES_PASSWORD: hlg
+      POSTGRES_PASSWORD: hlg_secret
+      POSTGRES_DB: hlg_academy
+    ports:
+      - "127.0.0.1:5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U hlg -d hlg"]
-      interval: 10s
-      timeout: 5s
+      test: ["CMD-SHELL", "pg_isready -U hlg -d hlg_academy"]
+      interval: 5s
+      timeout: 3s
       retries: 5
 
-  api:
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile
+  redis:
+    image: redis:7-alpine
     restart: unless-stopped
-    env_file: .env
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
     environment:
-      PORT: 4000
-      DATABASE_URL: postgresql://hlg:hlg@db:5432/hlg?schema=public
+      DATABASE_URL: postgresql+asyncpg://hlg:hlg_secret@db:5432/hlg_academy
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: change-me-in-production
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     volumes:
       - uploads:/app/uploads
 
-  web:
-    build:
-      context: .
-      dockerfile: apps/web/Dockerfile
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
-    depends_on:
-      - api
-
-  admin:
-    build:
-      context: .
-      dockerfile: apps/admin/Dockerfile
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
-    depends_on:
-      - api
-
-  nginx:
-    image: nginx:1.25-alpine
+  frontend:
+    build: ./frontend
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./infra/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./infra/nginx/.htpasswd.example:/etc/nginx/.htpasswd:ro
-      - certbot-webroot:/var/www/certbot
-      - letsencrypt:/etc/letsencrypt
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://backend:8000
     depends_on:
-      - web
-      - admin
-      - api
+      - backend
 
 volumes:
-  postgres-data:
+  pgdata:
   uploads:
-  certbot-webroot:
-  letsencrypt:

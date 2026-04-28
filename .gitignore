@@ -11,3 +11,10 @@ uploads
 tmp
 postgres-data
 backups
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+.vite/
+.DS_Store
+pgdata/
