@@ -120,15 +120,6 @@ async def submit_quiz(
     score = (earned_points / total_points * 100) if total_points > 0 else 0
     passed = score >= quiz.passing_score
 
-    attempt = QuizAttempt(
-        user_id=user.id,
-        quiz_id=quiz_id,
-        score=round(score, 1),
-        answers=json.dumps(body.answers),
-        passed=passed,
-    )
-    db.add(attempt)
-
     if passed:
         prior_pass = await db.execute(
             select(QuizAttempt).where(
@@ -139,6 +130,15 @@ async def submit_quiz(
         )
         if not prior_pass.scalar_one_or_none():
             user.points += 50
+
+    attempt = QuizAttempt(
+        user_id=user.id,
+        quiz_id=quiz_id,
+        score=round(score, 1),
+        answers=json.dumps(body.answers),
+        passed=passed,
+    )
+    db.add(attempt)
 
     await db.commit()
     await db.refresh(attempt)
