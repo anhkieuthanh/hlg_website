@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { companyStats, withLocale } from "@hlg/shared";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,6 +7,18 @@ import { ControlFlow, PartnerCta, TrustBar } from "../../components/ExperienceSe
 import { Reveal, Stagger } from "../../components/MotionPrimitives";
 import { getLocale, localized, t } from "../../lib/content";
 import { getHomeContent } from "../../lib/public-api";
+
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = getLocale(params.locale);
+  return {
+    title: {
+      absolute:
+        locale === "vi"
+          ? "Hoang Long Group — San xuat ket cau & Thi cong cong nghiep"
+          : "Hoang Long Group — Structural Fabrication & Industrial Construction"
+    }
+  };
+}
 
 export default async function HomePage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
