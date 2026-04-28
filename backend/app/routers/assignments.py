@@ -8,6 +8,7 @@ from app.models import Assignment, Submission, SubmissionStatus, User
 from app.schemas import (
     AssignmentCreate,
     AssignmentOut,
+    GradeRequest,
     SubmissionCreate,
     SubmissionOut,
 )
@@ -95,8 +96,7 @@ async def list_submissions(
 @router.put("/submissions/{submission_id}/grade", response_model=SubmissionOut)
 async def grade_submission(
     submission_id: int,
-    score: float,
-    feedback: str = "",
+    body: GradeRequest,
     db: AsyncSession = Depends(get_db),
     _admin: User = Depends(require_admin),
 ):
@@ -104,8 +104,8 @@ async def grade_submission(
     sub = result.scalar_one_or_none()
     if not sub:
         raise HTTPException(status_code=404, detail="Bài nộp không tồn tại")
-    sub.score = score
-    sub.feedback = feedback
+    sub.score = body.score
+    sub.feedback = body.feedback
     sub.status = SubmissionStatus.GRADED
     await db.commit()
     await db.refresh(sub)

@@ -285,6 +285,11 @@ class SubmissionCreate(BaseModel):
     text_content: str = ""
 
 
+class GradeRequest(BaseModel):
+    score: float
+    feedback: str = ""
+
+
 class SubmissionOut(BaseModel):
     id: int
     user_id: int

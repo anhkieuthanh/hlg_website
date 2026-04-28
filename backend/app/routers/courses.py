@@ -87,7 +87,8 @@ async def list_courses(
     if user.role != "admin":
         q = q.where(Course.is_published.is_(True))
     if search:
-        q = q.where(Course.title.ilike(f"%{search}%"))
+        escaped = search.replace("%", "\\%").replace("_", "\\_")
+        q = q.where(Course.title.ilike(f"%{escaped}%"))
     if category_id:
         q = q.where(Course.category_id == category_id)
     if level:
