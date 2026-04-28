@@ -121,6 +121,7 @@ async def submit_quiz(
     passed = score >= quiz.passing_score
 
     if passed:
+        await db.execute(select(User).where(User.id == user.id).with_for_update())
         prior_pass = await db.execute(
             select(QuizAttempt).where(
                 QuizAttempt.user_id == user.id,

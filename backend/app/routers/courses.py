@@ -206,16 +206,47 @@ async def update_course(
     data = body.model_dump(exclude_unset=True, exclude={"prerequisite_ids", "department_ids"})
     for k, v in data.items():
         setattr(course, k, v)
+
+    if body.prerequisite_ids is not None:
+        await db.execute(
+            course_prerequisites.delete().where(course_prerequisites.c.course_id == course.id)
+        )
+        for pid in body.prerequisite_ids:
+            await db.execute(
+                course_prerequisites.insert().values(course_id=course.id, prerequisite_id=pid)
+            )
+    if body.department_ids is not None:
+        await db.execute(
+            department_courses.delete().where(department_courses.c.course_id == course.id)
+        )
+        for did in body.department_ids:
+            await db.execute(
+                department_courses.insert().values(department_id=did, course_id=course.id)
+            )
+
     await db.commit()
-    await db.refresh(course)
+    result2 = await db.execute(
+        select(Course).options(
+            selectinload(Course.category),
+            selectinload(Course.modules),
+            selectinload(Course.enrollments),
+            selectinload(Course.reviews),
+        ).where(Course.id == course_id)
+    )
+    course = result2.scalar_one()
+    ratings = [r.rating for r in course.reviews]
     return CourseOut(
         id=course.id, title=course.title, slug=course.slug,
         description=course.description, thumbnail_url=course.thumbnail_url,
         level=course.level, is_published=course.is_published,
         is_sequential=course.is_sequential, duration_minutes=course.duration_minutes,
         deadline=course.deadline, access_days=course.access_days,
-        category_id=course.category_id, category_name=None,
+        category_id=course.category_id,
+        category_name=course.category.name if course.category else None,
         created_at=course.created_at, updated_at=course.updated_at,
+        enrollment_count=len(course.enrollments),
+        avg_rating=round(sum(ratings) / len(ratings), 1) if ratings else 0.0,
+        module_count=len(course.modules),
     )
 
 
@@ -349,6 +380,9 @@ async def mark_lesson_complete(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    lesson_result = await db.execute(select(Lesson).where(Lesson.id == lesson_id))
+    if not lesson_result.scalar_one_or_none():
+        raise HTTPException(status_code=404, detail="Bài học không tồn tại")
     existing = await db.execute(
         select(LessonProgress).where(
             LessonProgress.user_id == user.id, LessonProgress.lesson_id == lesson_id

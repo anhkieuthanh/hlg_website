@@ -66,6 +66,7 @@ async def submit_assignment(
         score = assignment.max_score
 
     if score is not None:
+        await db.execute(select(User).where(User.id == user.id).with_for_update())
         prior = await db.execute(
             select(Submission).where(
                 Submission.user_id == user.id,
