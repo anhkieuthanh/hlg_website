@@ -130,7 +130,15 @@ async def submit_quiz(
     db.add(attempt)
 
     if passed:
-        user.points += 50
+        prior_pass = await db.execute(
+            select(QuizAttempt).where(
+                QuizAttempt.user_id == user.id,
+                QuizAttempt.quiz_id == quiz_id,
+                QuizAttempt.passed.is_(True),
+            )
+        )
+        if not prior_pass.scalar_one_or_none():
+            user.points += 50
 
     await db.commit()
     await db.refresh(attempt)
