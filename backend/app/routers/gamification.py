@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -64,15 +64,16 @@ async def award_badge(
     badge_result = await db.execute(select(Badge).where(Badge.id == badge_id))
     badge = badge_result.scalar_one_or_none()
     if not badge:
-        return {"message": "Badge không tồn tại"}
-
-    ub = UserBadge(user_id=user_id, badge_id=badge_id)
-    db.add(ub)
+        raise HTTPException(status_code=404, detail="Badge không tồn tại")
 
     user_result = await db.execute(select(User).where(User.id == user_id))
     target_user = user_result.scalar_one_or_none()
-    if target_user:
-        target_user.points += badge.points_value
+    if not target_user:
+        raise HTTPException(status_code=404, detail="Người dùng không tồn tại")
+
+    ub = UserBadge(user_id=user_id, badge_id=badge_id)
+    db.add(ub)
+    target_user.points += badge.points_value
 
     await db.commit()
     return {"message": "Đã trao badge"}
