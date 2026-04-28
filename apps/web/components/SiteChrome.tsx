@@ -3,6 +3,8 @@ import Link from "next/link";
 import type { PublicSiteConfig } from "../lib/public-api";
 import { Reveal, Stagger } from "./MotionPrimitives";
 import { PageTransition } from "./PageTransition";
+import { MobileNavToggle } from "./MobileNav";
+import { BackToTop } from "./BackToTop";
 
 export function SiteChrome({ locale, site, children }: { locale: Locale; site: PublicSiteConfig; children: React.ReactNode }) {
   const headerLinks = site.navigation.filter((item) => item.placement === "header").sort((a, b) => a.order - b.order);
@@ -12,6 +14,9 @@ export function SiteChrome({ locale, site, children }: { locale: Locale; site: P
 
   return (
     <div className="site-shell">
+      <a className="skip-link" href="#main-content">
+        {locale === "vi" ? "Chuyển đến nội dung chính" : "Skip to main content"}
+      </a>
       <PageTransition locale={locale} />
       <header className="topbar">
         <nav className="nav" aria-label="Main navigation">
@@ -22,31 +27,35 @@ export function SiteChrome({ locale, site, children }: { locale: Locale; site: P
               {site.header.brandName}
             </span>
           </Link>
-          <div className="nav-links">
-            {headerLinks.map((item) => (
-              <Link key={item.id} href={linkHref(locale, item.href)}>
-                {item.label}
+          <MobileNavToggle />
+          <div className="nav-drawer">
+            <div className="nav-links">
+              {headerLinks.map((item) => (
+                <Link key={item.id} href={linkHref(locale, item.href)}>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+            {site.header.cta.enabled ? (
+              <Link className="button nav-cta" href={linkHref(locale, site.header.cta.href)}>
+                {site.header.cta.label}
               </Link>
-            ))}
-          </div>
-          {site.header.cta.enabled ? (
-            <Link className="button nav-cta" href={linkHref(locale, site.header.cta.href)}>
-              {site.header.cta.label}
-            </Link>
-          ) : null}
-          <div className="locale-switch" aria-label="Language switcher">
-            <Link className={locale === "vi" ? "active" : ""} href="/vi" aria-label="Tiếng Việt">
-              <span aria-hidden="true">🇻🇳</span>
-              <span className="sr-only">Tiếng Việt</span>
-            </Link>
-            <Link className={locale === "en" ? "active" : ""} href="/en" aria-label="English">
-              <span aria-hidden="true">🇺🇸</span>
-              <span className="sr-only">English</span>
-            </Link>
+            ) : null}
+            <div className="locale-switch" aria-label="Language switcher">
+              <Link className={locale === "vi" ? "active" : ""} href="/vi" aria-label="Tiếng Việt">
+                <span aria-hidden="true">🇻🇳</span>
+                <span className="sr-only">Tiếng Viet</span>
+              </Link>
+              <Link className={locale === "en" ? "active" : ""} href="/en" aria-label="English">
+                <span aria-hidden="true">🇺🇸</span>
+                <span className="sr-only">English</span>
+              </Link>
+            </div>
           </div>
         </nav>
       </header>
-      {children}
+      <div id="main-content">{children}</div>
+      <BackToTop />
       <footer className="footer">
         <Stagger className="container footer-grid" y={14}>
           <div className="footer-brand">

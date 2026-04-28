@@ -134,7 +134,7 @@ function fallbackSiteConfig(locale: Locale): PublicSiteConfig {
       logoUrl: "/assets/hoang-long-logo.svg",
       brandName: locale === "vi" ? "Hoàng Long Group" : "Hoang Long Group",
       tagline: "Manufacturing + Construction",
-      cta: { enabled: false, href: "/contact", label: t(locale, "partnerCtaPrimary") }
+      cta: { enabled: true, href: "/contact", label: t(locale, "partnerCtaPrimary") }
     },
     navigation: [...headerItems, ...footerCapabilities, ...footerProof],
     footer: {

@@ -1,10 +1,24 @@
+import type { Metadata } from "next";
 import { companyStats, withLocale } from "@hlg/shared";
+import Image from "next/image";
 import Link from "next/link";
 import { ProjectCard, NewsCard } from "../../components/Cards";
 import { ControlFlow, PartnerCta, TrustBar } from "../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../components/MotionPrimitives";
 import { getLocale, localized, t } from "../../lib/content";
 import { getHomeContent } from "../../lib/public-api";
+
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = getLocale(params.locale);
+  return {
+    title: {
+      absolute:
+        locale === "vi"
+          ? "Hoang Long Group — San xuat ket cau & Thi cong cong nghiep"
+          : "Hoang Long Group — Structural Fabrication & Industrial Construction"
+    }
+  };
+}
 
 export default async function HomePage({ params }: { params: { locale: string } }) {
   const locale = getLocale(params.locale);
@@ -14,7 +28,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
   return (
     <main>
       <section className="hero">
-        <img src="/assets/industrial-hero.png" alt="" />
+        <Image src="/assets/industrial-hero.png" alt="" fill priority sizes="100vw" />
         <Stagger className="hero-content" y={14}>
           <p className="eyebrow">{t(locale, "eyebrow")}</p>
           <h1>{t(locale, "heroTitle")}</h1>
@@ -48,7 +62,9 @@ export default async function HomePage({ params }: { params: { locale: string } 
           <Stagger className="grid">
             {factoryProof.map((item) => (
               <article className="card" key={item.id}>
-                <img className="card-media" src={item.image} alt={localized(locale, item.title)} />
+                <div className="card-media-wrap">
+                  <Image className="card-media" src={item.image || "/assets/industrial-hero.png"} alt={localized(locale, item.title)} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                </div>
                 <div className="card-body">
                   <div className="meta">
                     <span>{item.type}</span>

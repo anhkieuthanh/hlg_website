@@ -1,8 +1,21 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getLocale, localized } from "../../../../lib/content";
 import { PartnerCta } from "../../../../components/ExperienceSections";
 import { Reveal, Stagger } from "../../../../components/MotionPrimitives";
 import { getCatalogueProduct } from "../../../../lib/public-api";
+
+export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
+  const locale = getLocale(params.locale);
+  const product = await getCatalogueProduct(locale, params.slug);
+  if (!product) return {};
+  return {
+    title: localized(locale, product.name),
+    description: localized(locale, product.summary),
+    openGraph: { images: product.image ? [{ url: product.image }] : undefined }
+  };
+}
 
 export default async function ProductDetailPage({ params }: { params: { locale: string; slug: string } }) {
   const locale = getLocale(params.locale);
@@ -19,7 +32,9 @@ export default async function ProductDetailPage({ params }: { params: { locale: 
       </section>
       <Stagger className="container detail-body">
         <article>
-          <img className="card-media" src={product.image} alt={localized(locale, product.name)} />
+          <div className="card-media-wrap">
+            <Image className="card-media" src={product.image || "/assets/industrial-hero.png"} alt={localized(locale, product.name)} fill priority sizes="(max-width: 768px) 100vw, 60vw" />
+          </div>
           <p>{localized(locale, product.summary)}</p>
           <div className="insight-panel">
             <h2>{locale === "vi" ? "Cách dùng hạng mục này trong hợp tác" : "How this scope fits cooperation"}</h2>
