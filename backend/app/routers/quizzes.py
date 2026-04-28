@@ -128,7 +128,7 @@ async def submit_quiz(
                 QuizAttempt.passed.is_(True),
             )
         )
-        if not prior_pass.scalar_one_or_none():
+        if not prior_pass.scalars().first():
             user.points += 50
 
     attempt = QuizAttempt(

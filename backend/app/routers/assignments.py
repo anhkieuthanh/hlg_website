@@ -73,7 +73,7 @@ async def submit_assignment(
                 Submission.status == SubmissionStatus.AUTO_GRADED,
             )
         )
-        if not prior.scalar_one_or_none():
+        if not prior.scalars().first():
             user.points += 30
 
     submission = Submission(
