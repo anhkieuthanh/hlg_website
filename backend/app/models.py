@@ -12,6 +12,7 @@ from sqlalchemy import (
     String,
     Text,
     Table,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
 
@@ -225,6 +226,7 @@ class Lesson(Base):
 
 class Enrollment(Base):
     __tablename__ = "enrollments"
+    __table_args__ = (UniqueConstraint("user_id", "course_id"),)
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)

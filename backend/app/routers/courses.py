@@ -88,7 +88,7 @@ async def list_courses(
         q = q.where(Course.is_published.is_(True))
     if search:
         escaped = search.replace("%", "\\%").replace("_", "\\_")
-        q = q.where(Course.title.ilike(f"%{escaped}%"))
+        q = q.where(Course.title.ilike(f"%{escaped}%", escape="\\"))
     if category_id:
         q = q.where(Course.category_id == category_id)
     if level:
