@@ -118,7 +118,7 @@ async def list_courses(
 
 
 @router.get("/courses/{course_id}", response_model=CourseOut)
-async def get_course(course_id: int, db: AsyncSession = Depends(get_db), _user: User = Depends(get_current_user)):
+async def get_course(course_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
     result = await db.execute(
         select(Course).options(
             selectinload(Course.category),
@@ -129,6 +129,8 @@ async def get_course(course_id: int, db: AsyncSession = Depends(get_db), _user: 
     )
     c = result.scalar_one_or_none()
     if not c:
+        raise HTTPException(status_code=404, detail="Khóa học không tồn tại")
+    if not c.is_published and user.role != "admin":
         raise HTTPException(status_code=404, detail="Khóa học không tồn tại")
     ratings = [r.rating for r in c.reviews]
     return CourseOut(
@@ -234,6 +236,11 @@ async def delete_course(
 # ── Enrollment ──────────────────────────────────────────────────────
 @router.post("/courses/{course_id}/enroll", status_code=201)
 async def enroll(course_id: int, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
+    course = (await db.execute(select(Course).where(Course.id == course_id))).scalar_one_or_none()
+    if not course:
+        raise HTTPException(status_code=404, detail="Khóa học không tồn tại")
+    if not course.is_published:
+        raise HTTPException(status_code=400, detail="Khóa học chưa được xuất bản")
     existing = await db.execute(
         select(Enrollment).where(Enrollment.user_id == user.id, Enrollment.course_id == course_id)
     )

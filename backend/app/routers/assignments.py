@@ -65,15 +65,23 @@ async def submit_assignment(
         status = SubmissionStatus.AUTO_GRADED
         score = assignment.max_score
 
+    if score is not None:
+        prior = await db.execute(
+            select(Submission).where(
+                Submission.user_id == user.id,
+                Submission.assignment_id == assignment_id,
+                Submission.status == SubmissionStatus.AUTO_GRADED,
+            )
+        )
+        if not prior.scalar_one_or_none():
+            user.points += 30
+
     submission = Submission(
         user_id=user.id, assignment_id=assignment_id,
         link_url=body.link_url, text_content=body.text_content,
         status=status, score=score,
     )
     db.add(submission)
-
-    if score is not None:
-        user.points += 30
 
     await db.commit()
     await db.refresh(submission)
