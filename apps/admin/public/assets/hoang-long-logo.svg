@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Hoang Long JSC logo</title>
+  <desc id="desc">Blue Hoang Long JSC logo with yellow sunrise, red sun, white waves, and white lettering.</desc>
+  <rect width="512" height="512" rx="34" fill="#11539a"/>
+  <path
+    d="M33 318C47 204 139 109 256 109s209 95 223 209c-26-86-114-151-223-151S59 232 33 318Z"
+    fill="#fff200"
+  />
+  <path
+    d="M77 308c9-52 28-93 47-108-8 39-2 82 13 108H77Zm44 0c11-61 31-107 54-123-8 47 0 96 22 123h-76Zm64 0c13-70 41-116 71-116s58 46 71 116H185Zm130 0c22-27 30-76 22-123 23 16 43 62 54 123h-76Zm60 0c15-26 21-69 13-108 19 15 38 56 47 108h-60Z"
+    fill="#11539a"
+  />
+  <path d="M157 318a99 99 0 0 1 198 0H157Z" fill="#ed1b24"/>
+  <path
+    d="M32 328c12 0 12-6 24-6s12 6 24 6 12-6 24-6 12 6 24 6 12-6 24-6 12 6 24 6 12-6 24-6 12 6 24 6 12-6 24-6 12 6 24 6 12-6 24-6 12 6 24 6 12-6 24-6 12 6 24 6 12-6 24-6 12 6 24 6 12-6 24-6 12 6 24 6 12-6 24-6 12 6 24 6"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="4"
+  />
+  <text
+    x="256"
+    y="382"
+    fill="#ffffff"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="46"
+    font-weight="800"
+    letter-spacing="5"
+    text-anchor="middle"
+  >HOANG LONG JSC</text>
+  <path d="M33 403h151M328 403h151" stroke="#ffffff" stroke-width="4"/>
+  <text
+    x="256"
+    y="417"
+    fill="#ffffff"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="24"
+    font-weight="800"
+    letter-spacing="12"
+    text-anchor="middle"
+  >*****</text>
+</svg>
